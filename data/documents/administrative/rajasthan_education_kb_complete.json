@@ -1,0 +1,556 @@
+{
+  "Academic_Queries": {
+    "RBSE_Syllabus_2025_26": {
+      "Class_8": {
+        "info": "Class 8 syllabus includes subjects: Hindi, English, Mathematics, Science, Social Studies",
+        "details": "Covers fundamental concepts in all subjects preparing for board classes",
+        "link": "https://rajeduboard.rajasthan.gov.in"
+      },
+      "Class_9": {
+        "info": "Half-yearly syllabus covers: Math (Number System, Algebra, Geometry), English (Reading, Writing, Grammar), Science (Physics, Chemistry, Biology), Social Science",
+        "subjects": {
+          "Mathematics": "Number System (8 marks), Algebra (14 marks), Coordinate Geometry (6 marks), Geometry (28 marks), Mensuration (20 marks), Statistics (10 marks)",
+          "English": "Reading comprehension, Letter writing, Grammar (Tenses, Determiners, Prepositions), Text Book questions"
+        },
+        "link": "https://rajeduboard.rajasthan.gov.in/anudeshika-etc/09_2025.pdf"
+      },
+      "Class_10": {
+        "info": "Board exam class - Full syllabus for all subjects with board exam pattern",
+        "exam_pattern": "Theory 80 marks + Internal 20 marks for most subjects",
+        "passing_marks": "Minimum 33% required in each subject",
+        "grading_system": {
+          "A1": "90% and above (540-600 marks)",
+          "A2": "80-90% (480-539 marks)",
+          "B1": "70-80% (420-479 marks)",
+          "B2": "60-70% (360-419 marks)",
+          "C1": "50-60% (300-359 marks)",
+          "C2": "40-50% (240-299 marks)",
+          "D": "33-40% (198-239 marks) - Passing Grade",
+          "E": "Below 33% - Fail"
+        },
+        "link": "https://rajeduboard.rajasthan.gov.in"
+      },
+      "Class_11": {
+        "info": "Available streams: Science (PCM/PCB), Commerce (Accountancy, Business Studies, Economics), Arts (History, Geography, Political Science, Psychology, Sociology)",
+        "link": "https://rajeduboard.rajasthan.gov.in/anudeshika-etc/11_2025.pdf"
+      },
+      "Class_12": {
+        "info": "Final board examination with same stream subjects as Class 11",
+        "exam_pattern": "Most subjects: Theory 80 + Internal 20 = 100 marks. Science practicals: Theory 56 + Internal 14 + Practical 30 = 100 marks",
+        "passing_marks": "Minimum 33% in theory, practical, and overall separately required",
+        "link": "https://rajeduboard.rajasthan.gov.in/anudeshika-etc/12_2025.pdf"
+      }
+    },
+    "Model_Papers_Past_Papers": {
+      "info": "Previous year question papers and model papers available for Classes 8-12",
+      "link": "https://rajeduboard.rajasthan.gov.in"
+    }
+  },
+  "Examination_Queries": {
+    "RBSE_Board_Exams_2026": {
+      "Class_10": {
+        "exam_dates": "February to March 2026",
+        "exam_timing": "8:30 AM to 11:45 AM",
+        "admit_card": "Released in January/February 2026",
+        "result_date": "Expected May/June 2026",
+        "link": "https://rajeduboard.rajasthan.gov.in"
+      },
+      "Class_12": {
+        "exam_dates": "March to April 2026",
+        "exam_timing": "8:30 AM to 11:45 AM",
+        "admit_card": "Released in January/February 2026",
+        "result_date": "Expected May/June 2026",
+        "link": "https://rajeduboard.rajasthan.gov.in"
+      }
+    },
+    "Revaluation_Rechecking": {
+      "info": "Students can apply for rechecking/retotaling after results",
+      "process": "Apply online within 7-10 days",
+      "fee": "₹100 per subject",
+      "link": "https://rajeduboard.rajasthan.gov.in"
+    }
+  },
+  "Reservation_Policy": {
+    "Rajasthan_State_Reservation": {
+      "total_reservation": "49% total seats reserved in educational institutions",
+      "category_wise_breakdown": {
+        "SC": {
+          "percentage": "16%",
+          "full_form": "Scheduled Castes",
+          "details": "Reserved seats for SC category students in all government educational institutions"
+        },
+        "ST": {
+          "percentage": "12%",
+          "full_form": "Scheduled Tribes",
+          "details": "Reserved seats for ST category students including special provisions for Saharia tribe"
+        },
+        "OBC": {
+          "percentage": "21%",
+          "full_form": "Other Backward Classes",
+          "details": "Reserved seats for OBC category students (Non-Creamy Layer only)"
+        },
+        "MBC": {
+          "percentage": "Included in OBC quota",
+          "full_form": "More Backward Classes",
+          "details": "Special sub-category within OBC with additional benefits in some cases"
+        },
+        "EWS": {
+          "percentage": "10%",
+          "full_form": "Economically Weaker Sections",
+          "details": "For General category students with family income below ₹8 lakh per annum",
+          "income_limit": "Annual family income must be less than ₹8,00,000",
+          "property_criteria": "Should not own 5 acres or more agricultural land, residential plot of 1000 sq ft or more in notified municipalities, or residential plot of 100 sq yards or more in other areas"
+        }
+      },
+      "creamy_layer": {
+        "info": "OBC students from 'Creamy Layer' (high-income families) are not eligible for reservation",
+        "income_limit": "Annual family income should be below ₹8,00,000 to be eligible for OBC reservation",
+        "certificate_validity": "OBC-NCL (Non-Creamy Layer) certificate valid for 1 year from date of issue"
+      },
+      "additional_reservations": {
+        "women": "Horizontal reservation for women in certain courses/institutions",
+        "pwd": "3-5% reservation for Persons with Disabilities (PwD) - horizontal reservation",
+        "ex_servicemen": "Special reservation for children of ex-servicemen/defense personnel"
+      }
+    },
+    "Central_Universities_Reservation": {
+      "applicable_to": "Central University of Rajasthan and other central institutions",
+      "category_wise": {
+        "SC": "15% reservation",
+        "ST": "7.5% reservation",
+        "OBC_NCL": "27% reservation (Non-Creamy Layer only)",
+        "EWS": "10% reservation",
+        "PwD": "5% horizontal reservation"
+      },
+      "total": "59.5% total reservation in central institutions"
+    },
+    "Engineering_Colleges_Reservation": {
+      "REAP_quota_breakdown": {
+        "General": "Unreserved category - open competition",
+        "SC": "16% seats reserved",
+        "ST": "12% seats reserved",
+        "OBC": "21% seats reserved",
+        "EWS": "10% seats reserved",
+        "PwD": "3% horizontal reservation across all categories"
+      },
+      "seat_distribution": "Total ~20,000 engineering seats in Rajasthan",
+      "link": "https://reapbtech.com"
+    },
+    "Medical_Colleges_Reservation": {
+      "state_quota_85_percent": {
+        "SC": "16% of state quota seats",
+        "ST": "12% of state quota seats",
+        "OBC": "21% of state quota seats",
+        "EWS": "10% of state quota seats",
+        "PwD": "5% horizontal reservation"
+      },
+      "all_india_quota_15_percent": {
+        "SC": "15% reservation",
+        "ST": "7.5% reservation",
+        "OBC": "27% reservation",
+        "EWS": "10% reservation"
+      },
+      "management_quota": {
+        "info": "Private medical colleges have management quota seats",
+        "reservation": "Same reservation percentages applicable",
+        "fees": "Higher fees for management quota (₹5-25 lakhs per year)"
+      },
+      "link": "https://rajugneet2025.in"
+    },
+    "University_Reservation": {
+      "UG_PG_admissions": "University of Rajasthan and other state universities follow Rajasthan state reservation policy",
+      "breakdown": {
+        "SC": "16%",
+        "ST": "12%",
+        "OBC": "21%",
+        "EWS": "10%"
+      },
+      "link": "https://admission.uniraj.edu.in"
+    },
+    "Required_Certificates": {
+      "SC_Certificate": {
+        "issuing_authority": "Tehsildar/SDM/District Magistrate",
+        "validity": "Permanent (unless information changes)",
+        "required_for": "Admission, scholarship, fee concession"
+      },
+      "ST_Certificate": {
+        "issuing_authority": "Tehsildar/SDM/District Magistrate",
+        "validity": "Permanent",
+        "special_note": "Saharia tribe has additional benefits in Rajasthan"
+      },
+      "OBC_NCL_Certificate": {
+        "full_form": "Other Backward Classes - Non-Creamy Layer",
+        "issuing_authority": "Tehsildar/SDM",
+        "validity": "1 year from date of issue",
+        "renewal": "Must be renewed annually for admissions",
+        "income_criteria": "Annual family income below ₹8 lakh"
+      },
+      "EWS_Certificate": {
+        "issuing_authority": "Tehsildar/Revenue Officer",
+        "validity": "1 year from date of issue (for academic year)",
+        "income_criteria": "Annual family income below ₹8 lakh",
+        "property_criteria": "Agricultural land below 5 acres, residential plot restrictions apply",
+        "who_can_apply": "General category candidates only (not eligible if already in SC/ST/OBC category)"
+      },
+      "Disability_Certificate": {
+        "issuing_authority": "Medical Board at District/State level",
+        "minimum_disability": "40% or more disability required for reservation benefits",
+        "types": "Locomotor disability, Visual impairment, Hearing impairment, etc."
+      }
+    },
+    "Relaxation_Benefits": {
+      "age_relaxation": {
+        "SC_ST": "5 years age relaxation in competitive exams",
+        "OBC": "3 years age relaxation",
+        "PwD": "10 years age relaxation"
+      },
+      "marks_relaxation": {
+        "qualifying_marks": "Reserved category students get 5% relaxation in minimum qualifying marks",
+        "example": "If General needs 50%, SC/ST/OBC need 45%"
+      },
+      "fee_concession": {
+        "SC_ST": "Complete fee waiver or substantial reduction in government institutions",
+        "OBC": "Partial fee concession in many institutions",
+        "EWS": "Fee concession in some institutions"
+      }
+    },
+    "Important_Notes": {
+      "domicile_requirement": "Rajasthan domicile certificate required for state quota reservation benefits",
+      "certificate_verification": "All caste/category certificates verified during admission - original certificates mandatory",
+      "false_certificates": "Severe penalties including cancellation of admission and legal action for fake certificates",
+      "cutoff_variations": "Reserved category cutoffs are generally lower than General category",
+      "seat_availability": "If reserved seats remain vacant, they may be carried forward or converted as per rules"
+    }
+  },
+  "Scholarship_Details": {
+    "SJE_Scholarships_State_Level": {
+      "application_period": "November 2025 to April 2026 for 2025-26 session",
+      "portal": "https://sje.rajasthan.gov.in/Scholarship_portal.aspx",
+      "main_portal": "https://scholarship.rajasthan.gov.in",
+      "Post_Matric_SC_ST": {
+        "name": "Post Matric Scholarship for SC/ST Students",
+        "eligibility": {
+          "category": "SC or ST certificate holder",
+          "class": "Students studying in Class 11, 12, or any post-matric course (diploma, degree, PG, etc.)",
+          "income": "Annual family income below ₹2.50 lakh",
+          "attendance": "Minimum 75% attendance required"
+        },
+        "benefits": {
+          "maintenance_allowance": "₹380-1200 per month (depending on course and hostel/day scholar)",
+          "tuition_fees": "Actual tuition fees or ₹2,000-5,000 (whichever is less)",
+          "other_benefits": "Study tour charges, thesis typing, book allowance"
+        },
+        "documents": {
+          "mandatory": [
+            "SC/ST caste certificate",
+            "Income certificate (below ₹2.5 lakh)",
+            "Previous year marksheet",
+            "Current year fee receipt",
+            "Bank account details (student's own account)",
+            "Aadhaar card",
+            "Bhamashah card (if applicable)",
+            "Jan Aadhaar card"
+          ]
+        },
+        "application_process": "Online application on SJE portal → Upload documents → Submit → Track status",
+        "link": "https://sje.rajasthan.gov.in"
+      },
+      "Post_Matric_OBC": {
+        "name": "Post Matric Scholarship for OBC Students",
+        "eligibility": {
+          "category": "OBC certificate holder (Non-Creamy Layer)",
+          "class": "Class 11, 12, or post-matric courses",
+          "income": "Annual family income below ₹2.50 lakh",
+          "marks": "Minimum 50% marks in previous qualifying exam"
+        },
+        "benefits": {
+          "maintenance_allowance": "₹300-750 per month",
+          "tuition_fees": "Actual fees or ₹2,000-3,500"
+        },
+        "documents": [
+          "OBC-NCL certificate (valid for current year)",
+          "Income certificate",
+          "Marksheets",
+          "Fee receipt",
+          "Bank details",
+          "Aadhaar"
+        ],
+        "link": "https://sje.rajasthan.gov.in"
+      },
+      "Pre_Matric_Scholarship": {
+        "name": "Pre Matric Scholarship (Classes 9-10)",
+        "eligibility": {
+          "category": "SC/ST/OBC students",
+          "class": "Class 9 or 10",
+          "income": "Annual family income below ₹2.50 lakh"
+        },
+        "benefits": {
+          "day_scholar": "₹225 per month",
+          "hostel": "₹525 per month",
+          "adhoc_grant": "₹1,000 per year"
+        },
+        "link": "https://sje.rajasthan.gov.in"
+      },
+      "Chief_Minister_Higher_Education_Scholarship": {
+        "name": "Mukhya Mantri Ucch Shiksha Scholarship Yojana",
+        "eligibility": {
+          "class_12_marks": "60% or more marks in Class 12",
+          "income": "Annual family income below ₹2.5 lakh",
+          "admission": "Admitted to graduation (BA/BSc/BCom) in Rajasthan government college"
+        },
+        "benefits": {
+          "amount": "₹5,000 per year for undergraduate studies"
+        },
+        "application": "Through government college or online portal",
+        "link": "https://hte.rajasthan.gov.in"
+      },
+      "Dr_Ambedkar_Post_Matric_Scholarship": {
+        "name": "Dr. Ambedkar Post Matric Scholarship for EBC Students",
+        "full_form": "Economically Backward Classes",
+        "eligibility": {
+          "category": "General category (not SC/ST/OBC)",
+          "income": "Annual family income below ₹1 lakh",
+          "class": "Post-matric studies"
+        },
+        "benefits": "Similar to SC/ST post-matric scholarship amounts",
+        "link": "https://sje.rajasthan.gov.in"
+      },
+      "Merit_Scholarships": {
+        "Gargi_Puraskar": {
+          "name": "Gargi Puraskar (Girl Students Merit Award)",
+          "eligibility": "Girls who secure 75% or more marks in Class 10 or 12 board exams",
+          "amount": "₹3,000 for Class 10, ₹5,000 for Class 12",
+          "application": "Through school or district education office"
+        },
+        "Kalpana_Chawla_Scholarship": {
+          "name": "Kalpana Chawla Scholarship for Girl Students",
+          "eligibility": "Girl students pursuing technical/professional courses",
+          "amount": "₹40,000 per year",
+          "link": "https://hte.rajasthan.gov.in"
+        }
+      }
+    },
+    "Minority_Scholarships": {
+      "applicable_communities": [
+        "Muslims",
+        "Christians",
+        "Sikhs",
+        "Buddhists",
+        "Jains",
+        "Parsis (Zoroastrians)"
+      ],
+      "Pre_Matric_Minority": {
+        "name": "Pre-Matric Scholarship for Minority Students",
+        "class": "Classes 1-10",
+        "eligibility": {
+          "community": "Any of the six minority communities",
+          "income": "Annual family income below ₹1 lakh"
+        },
+        "benefits": {
+          "classes_1_10": "₹1,000-3,000 per year depending on class and hostel/day scholar"
+        }
+      },
+      "Post_Matric_Minority": {
+        "name": "Post-Matric Scholarship for Minority Students",
+        "eligibility": {
+          "community": "Six notified minority communities",
+          "income": "Annual family income below ₹2 lakh",
+          "marks": "Minimum 50% marks in previous exam"
+        },
+        "benefits": {
+          "maintenance": "₹300-1,200 per month",
+          "tuition_fees": "Actual fees reimbursed (within limits)"
+        },
+        "application": "National Scholarship Portal (NSP) or state portal",
+        "link": "https://scholarships.gov.in"
+      },
+      "Merit_Cum_Means_Minority": {
+        "name": "Merit-cum-Means Scholarship for Professional and Technical Courses",
+        "eligibility": {
+          "community": "Minority community student",
+          "admission": "Admission through competitive exam (JEE/NEET/CLAT etc.)",
+          "income": "Annual family income below ₹2.5 lakh",
+          "marks": "Minimum 50% in Class 12"
+        },
+        "courses_covered": "Engineering, Medical, MBA, Law, Nursing, Architecture, etc.",
+        "benefits": {
+          "course_fee": "Up to ₹20,000 per year for technical courses",
+          "maintenance": "₹10,000 per year (hostel), ₹5,000 (day scholar)"
+        },
+        "link": "https://scholarships.gov.in"
+      }
+    },
+    "National_Scholarships": {
+      "NSP_Portal": {
+        "name": "National Scholarship Portal",
+        "website": "https://scholarships.gov.in",
+        "info": "Central government scholarships for SC/ST/OBC/Minority students across India",
+        "registration": "One-time registration, apply for multiple schemes"
+      },
+      "Central_Sector_Scholarship": {
+        "name": "Central Sector Scheme of Scholarship for College and University Students",
+        "eligibility": {
+          "class_12_marks": "Top 20% in Class 12 board exam (percentile-based)",
+          "income": "Annual family income below ₹8 lakh",
+          "admission": "Regular degree course in government college/university"
+        },
+        "amount": "₹10,000-20,000 per year for 3-5 years",
+        "seats": "82,000 scholarships across India annually"
+      },
+      "PM_Scholarship_Defense": {
+        "name": "PM Scholarship Scheme for Wards of Ex-Servicemen",
+        "eligibility": "Children of ex-servicemen, defense personnel",
+        "amount": "₹2,500 per month for boys, ₹3,000 per month for girls",
+        "link": "https://ksb.gov.in"
+      }
+    },
+    "Engineering_Medical_Scholarships": {
+      "JEE_NEET_Scholarship": {
+        "info": "Students qualifying JEE/NEET are eligible for various scholarships",
+        "examples": [
+          "INSPIRE Scholarship - ₹80,000 per year for top 1% students",
+          "Institute-specific scholarships at IITs/NITs/AIIMS",
+          "State merit scholarships"
+        ]
+      },
+      "Technical_Education_Scholarship": {
+        "name": "Rajasthan Technical Education Scholarship",
+        "for": "B.Tech, Diploma, Polytechnic students",
+        "eligibility": "SC/ST/OBC/Minority students with income below ₹2.5 lakh",
+        "link": "https://techedu.rajasthan.gov.in"
+      }
+    },
+    "Application_Process_Common": {
+      "registration": "Register on scholarship portal with mobile and email",
+      "login": "Login with credentials",
+      "fill_application": "Fill online form with personal, academic, income details",
+      "upload_documents": {
+        "format": "PDF or JPG",
+        "size": "Maximum 200-500 KB per document",
+        "quality": "Clear, readable scanned copies"
+      },
+      "submit": "Preview and submit application",
+      "track": "Note application/registration number for tracking",
+      "verification": "Institute verification required",
+      "disbursement": "Amount directly transferred to student's bank account"
+    },
+    "Common_Documents_Required": {
+      "mandatory_all_scholarships": [
+        "Aadhaar card",
+        "Bank account passbook (student's own account)",
+        "Passport size photograph",
+        "Income certificate (issued within last 6 months-1 year)",
+        "Previous year marksheet",
+        "Current year fee receipt/admission proof",
+        "Domicile certificate (Rajasthan)"
+      ],
+      "category_specific": [
+        "SC/ST/OBC/EWS certificate",
+        "Minority community certificate (for minority scholarships)",
+        "Disability certificate (if applicable)",
+        "Jan Aadhaar/Bhamashah card (Rajasthan specific)"
+      ]
+    },
+    "Important_Deadlines": {
+      "state_scholarships": "November to April every year",
+      "NSP_scholarships": "October to March (varies by scheme)",
+      "renewal": "Existing scholarship holders must renew annually",
+      "verification": "Institute verification within 15-30 days of application"
+    },
+    "Scholarship_Renewal": {
+      "info": "Most scholarships need annual renewal",
+      "criteria": "Minimum 50-60% marks in previous year, 75% attendance",
+      "process": "Re-apply through portal, upload current year documents",
+      "continuation": "Scholarship continues till course completion if criteria met"
+    },
+    "Help_Support": {
+      "SJE_helpline": "Check SJE website for helpline numbers",
+      "NSP_helpdesk": "0120-6619540 (National Scholarship Portal)",
+      "district_office": "Contact District Social Justice Officer for assistance",
+      "college_help": "College scholarship cell/office can guide application"
+    }
+  },
+  "Administrative_Policy_Queries": {
+    "University_Admissions_2026": {
+      "University_of_Rajasthan_UG": {
+        "courses": "BA, BCom, BCom (Hons), BSc, BBA, BCA, BPEd",
+        "admission_dates": "Expected April 2026",
+        "current_session": "2025-26 applications open till 24 November 2025",
+        "reservation": "SC 16%, ST 12%, OBC 21%, EWS 10%",
+        "link": "https://admission.uniraj.edu.in"
+      },
+      "University_of_Rajasthan_PG": {
+        "courses": "MA, MSc, MCom, MBA, MCA",
+        "MBA_details": "2 years, ₹50,000-80,000 per year, RUMAT based",
+        "link": "https://admission.uniraj.edu.in"
+      },
+      "Central_University_Rajasthan": {
+        "admission_through": "CUET scores",
+        "reservation": "Central government reservation (SC 15%, ST 7.5%, OBC 27%, EWS 10%)",
+        "link": "https://curajadm.samarth.edu.in"
+      }
+    },
+    "Engineering_Admissions": {
+      "REAP_2026": {
+        "full_form": "Rajasthan Engineering Admission Process",
+        "counselling_start": "June 2026 (4th week)",
+        "registration_last_date": "July 2, 2026",
+        "eligibility": "12th with PCM, 50% for General, 45% for SC/ST",
+        "admission_basis": "JEE Main rank (priority 1), 12th percentile (priority 2)",
+        "reservation": "SC 16%, ST 12%, OBC 21%, EWS 10%, PwD 3%",
+        "seats": "~20,000 B.Tech seats across Rajasthan",
+        "link": "https://reapbtech.com"
+      }
+    },
+    "Medical_Admissions": {
+      "NEET_Counselling_2026": {
+        "conducting_authority": "Rajasthan NEET UG Medical & Dental Counselling Board",
+        "courses": "MBBS, BDS",
+        "counselling_dates": "July-August 2026",
+        "reservation_state_quota": "SC 16%, ST 12%, OBC 21%, EWS 10%, PwD 5%",
+        "reservation_AIQ": "SC 15%, ST 7.5%, OBC 27%, EWS 10%",
+        "colleges": "34 government medical colleges",
+        "fees": "₹9,11,610 per year (most govt colleges)",
+        "link": "https://rajugneet2025.in"
+      }
+    },
+    "Law_Admissions": {
+      "top_colleges": "NLU Jodhpur, Manipal Jaipur, ICFAI Jaipur",
+      "entrance": "CLAT, LSAT-India, AILET",
+      "reservation": "Follows state/central reservation as applicable",
+      "link": "https://www.alujaipur.ac.in"
+    }
+  },
+  "Career_Higher_Education": {
+    "Competitive_Exams_2026": {
+      "JEE_Main": {
+        "session_1": "Jan 21-30, 2026",
+        "registration": "Oct 31 - Nov 27, 2025",
+        "reservation": "SC 15%, ST 7.5%, OBC 27%, EWS 10%, PwD 5%",
+        "link": "https://jeemain.nta.nic.in"
+      },
+      "NEET_UG": {
+        "exam_date": "May 3, 2026 (expected)",
+        "registration": "March-April 2026",
+        "reservation": "Same as JEE for AIQ, state quota as per state policy",
+        "link": "NTA NEET official website"
+      },
+      "CUET": {
+        "registration": "March 2026",
+        "exam_dates": "May-June 2026",
+        "reservation": "Central govt reservation policy",
+        "link": "https://cuet.nta.nic.in"
+      }
+    }
+  },
+  "Important_Contacts": {
+    "RBSE": "https://rajeduboard.rajasthan.gov.in",
+    "Education_Dept": "https://education.rajasthan.gov.in",
+    "University_Rajasthan": "https://admission.uniraj.edu.in",
+    "SJE_Scholarships": "https://sje.rajasthan.gov.in",
+    "NSP_Portal": "https://scholarships.gov.in",
+    "REAP": "https://reapbtech.com",
+    "NEET_Counselling": "https://rajugneet2025.in",
+    "Shala_Darpan": "https://rajshaladarpan.rajasthan.gov.in"
+  }
+}

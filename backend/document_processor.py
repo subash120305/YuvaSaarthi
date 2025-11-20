@@ -1,17 +1,18 @@
 """
 Document Processing and Ingestion System
-Handles PDFs and creates vector embeddings
+Handles PDFs, Markdown, and JSON files and creates vector embeddings
 """
 
 import os
 import re
+import json
 from pathlib import Path
 from typing import List, Dict, Optional
 from loguru import logger
 
-from langchain.document_loaders import PyPDFLoader, DirectoryLoader
-from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain.schema import Document
+from langchain_community.document_loaders import PyPDFLoader, DirectoryLoader
+from langchain_text_splitters import RecursiveCharacterTextSplitter
+from langchain_core.documents import Document
 from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_community.vectorstores import Chroma
 
@@ -49,36 +50,59 @@ class DocumentProcessor:
         """
         Extract metadata from filename patterns like:
         - class_8_mathematics.pdf
+        - class_10_maths (1).pdf  <- Handle numbered copies
         - class_10_science_chapter_5.pdf
         - polytechnic_electrical_semester_2.pdf
         """
         metadata = {}
 
+        # Clean filename - remove copy numbers like (1), (2), etc.
+        clean_filename = re.sub(r'\s*\(\d+\)', '', filename)
+
         # Extract class/grade
-        class_match = re.search(r'class[_\s]?(\d+)', filename, re.IGNORECASE)
+        class_match = re.search(r'class[_\s]?(\d+)', clean_filename, re.IGNORECASE)
         if class_match:
             metadata['class'] = f"Class {class_match.group(1)}"
             metadata['level'] = 'school'
 
         # Extract semester
-        sem_match = re.search(r'semester[_\s]?(\d+)', filename, re.IGNORECASE)
+        sem_match = re.search(r'semester[_\s]?(\d+)', clean_filename, re.IGNORECASE)
         if sem_match:
             metadata['semester'] = f"Semester {sem_match.group(1)}"
 
-        # Extract subject
-        subjects = [
-            'mathematics', 'math', 'science', 'physics', 'chemistry',
-            'biology', 'english', 'hindi', 'social', 'history', 'geography',
-            'economics', 'political', 'computer', 'electrical', 'mechanical',
-            'civil', 'electronics'
-        ]
-        for subject in subjects:
-            if subject in filename.lower():
-                metadata['subject'] = subject.title()
+        # Extract subject (expanded list with abbreviations)
+        subjects_map = {
+            'mathematics': 'Mathematics',
+            'maths': 'Mathematics',
+            'math': 'Mathematics',
+            'science': 'Science',
+            'physics': 'Physics',
+            'chemistry': 'Chemistry',
+            'biology': 'Biology',
+            'english': 'English',
+            'hindi': 'Hindi',
+            'social': 'Social Science',
+            'history': 'History',
+            'geography': 'Geography',
+            'economics': 'Economics',
+            'political': 'Political Science',
+            'computer': 'Computer Science',
+            'electrical': 'Electrical Engineering',
+            'mechanical': 'Mechanical Engineering',
+            'civil': 'Civil Engineering',
+            'electronics': 'Electronics',
+            'accountancy': 'Accountancy',
+            'commerce': 'Commerce',
+            'business': 'Business Studies'
+        }
+
+        for key, subject_name in subjects_map.items():
+            if key in clean_filename.lower():
+                metadata['subject'] = subject_name
                 break
 
         # Extract chapter
-        chapter_match = re.search(r'chapter[_\s]?(\d+)', filename, re.IGNORECASE)
+        chapter_match = re.search(r'chapter[_\s]?(\d+)', clean_filename, re.IGNORECASE)
         if chapter_match:
             metadata['chapter'] = f"Chapter {chapter_match.group(1)}"
 
@@ -92,9 +116,176 @@ class DocumentProcessor:
                 return category
         return "general"
 
+    def is_valid_document(self, documents: List[Document], filename: str) -> bool:
+        """
+        Check if document has meaningful content (not just cover page or empty)
+
+        Args:
+            documents: List of pages from PDF
+            filename: Name of the file
+
+        Returns:
+            True if document should be included, False if should be skipped
+        """
+        # Skip if no pages
+        if not documents:
+            logger.warning(f"Skipping {filename}: No pages found")
+            return False
+
+        # Skip if only 1-2 pages (likely just cover)
+        if len(documents) <= 2:
+            # Check if these pages have substantial content
+            total_text = "".join([doc.page_content for doc in documents])
+            # If less than 200 characters total, it's likely just a cover page
+            if len(total_text.strip()) < 200:
+                logger.warning(f"Skipping {filename}: Only {len(total_text)} chars (likely cover page)")
+                return False
+
+        # Check first page content for cover page indicators
+        first_page = documents[0].page_content.lower()
+        cover_indicators = [
+            'cover page',
+            'government of rajasthan',
+            'राजस्थान सरकार',
+            'department of education'
+        ]
+
+        # If first page is very short and contains cover indicators
+        if len(first_page.strip()) < 300:
+            if any(indicator in first_page for indicator in cover_indicators):
+                # But if PDF has many pages, it's still valid (cover + content)
+                if len(documents) > 3:
+                    logger.info(f"Including {filename}: Has cover but {len(documents)} total pages")
+                    return True
+                else:
+                    logger.warning(f"Skipping {filename}: Appears to be cover-only PDF")
+                    return False
+
+        return True
+
+    def load_markdown_file(self, file_path: Path) -> List[Document]:
+        """
+        Load a markdown file and convert it to Document objects
+
+        Args:
+            file_path: Path to the markdown file
+
+        Returns:
+            List of Document objects
+        """
+        try:
+            with open(file_path, 'r', encoding='utf-8') as f:
+                content = f.read()
+
+            # Extract metadata
+            file_metadata = self.extract_metadata_from_filename(file_path.stem)
+            category = self.get_category_from_path(file_path)
+
+            # Create document with metadata
+            doc = Document(
+                page_content=content,
+                metadata={
+                    'source': file_path.name,
+                    'category': category,
+                    'file_type': 'markdown',
+                    **file_metadata
+                }
+            )
+
+            logger.info(f"Loaded markdown file: {file_path.name}")
+            return [doc]
+
+        except Exception as e:
+            logger.error(f"Error loading markdown file {file_path.name}: {e}")
+            return []
+
+    def load_json_file(self, file_path: Path) -> List[Document]:
+        """
+        Load a JSON file and convert it to Document objects
+
+        Args:
+            file_path: Path to the JSON file
+
+        Returns:
+            List of Document objects
+        """
+        try:
+            with open(file_path, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+
+            # Convert JSON to readable text format
+            content = json.dumps(data, indent=2, ensure_ascii=False)
+
+            # Also create a more readable version
+            readable_content = self._json_to_readable_text(data)
+
+            # Extract metadata
+            file_metadata = self.extract_metadata_from_filename(file_path.stem)
+            category = self.get_category_from_path(file_path)
+
+            # Create document with metadata
+            doc = Document(
+                page_content=readable_content,
+                metadata={
+                    'source': file_path.name,
+                    'category': category,
+                    'file_type': 'json',
+                    **file_metadata
+                }
+            )
+
+            logger.info(f"Loaded JSON file: {file_path.name}")
+            return [doc]
+
+        except Exception as e:
+            logger.error(f"Error loading JSON file {file_path.name}: {e}")
+            return []
+
+    def _json_to_readable_text(self, data: dict, level: int = 0) -> str:
+        """
+        Convert JSON data to readable text format for better RAG retrieval
+
+        Args:
+            data: JSON data (dict or list)
+            level: Current nesting level for indentation
+
+        Returns:
+            Readable text representation
+        """
+        lines = []
+        indent = "  " * level
+
+        if isinstance(data, dict):
+            for key, value in data.items():
+                # Format key nicely
+                formatted_key = key.replace('_', ' ').title()
+
+                if isinstance(value, dict):
+                    lines.append(f"{indent}{formatted_key}:")
+                    lines.append(self._json_to_readable_text(value, level + 1))
+                elif isinstance(value, list):
+                    lines.append(f"{indent}{formatted_key}:")
+                    for item in value:
+                        if isinstance(item, (dict, list)):
+                            lines.append(self._json_to_readable_text(item, level + 1))
+                        else:
+                            lines.append(f"{indent}  - {item}")
+                else:
+                    lines.append(f"{indent}{formatted_key}: {value}")
+        elif isinstance(data, list):
+            for item in data:
+                if isinstance(item, (dict, list)):
+                    lines.append(self._json_to_readable_text(item, level))
+                else:
+                    lines.append(f"{indent}- {item}")
+        else:
+            lines.append(f"{indent}{data}")
+
+        return "\n".join(lines)
+
     def load_documents(self, category: Optional[str] = None) -> List[Document]:
         """
-        Load documents from the documents directory
+        Load documents from the documents directory (PDF, Markdown, JSON)
 
         Args:
             category: Optional category to load (textbooks, admissions, etc.)
@@ -115,14 +306,20 @@ class DocumentProcessor:
 
         all_documents = []
 
-        # Walk through directory structure
+        # Load PDF files
+        skipped_count = 0
         for pdf_file in doc_path.rglob("*.pdf"):
             try:
-                logger.debug(f"Processing: {pdf_file.name}")
+                logger.debug(f"Processing PDF: {pdf_file.name}")
 
                 # Load PDF
                 loader = PyPDFLoader(str(pdf_file))
                 documents = loader.load()
+
+                # Validate document has meaningful content
+                if not self.is_valid_document(documents, pdf_file.name):
+                    skipped_count += 1
+                    continue
 
                 # Extract metadata
                 file_metadata = self.extract_metadata_from_filename(pdf_file.stem)
@@ -133,6 +330,7 @@ class DocumentProcessor:
                     doc.metadata.update({
                         'source': pdf_file.name,
                         'category': category,
+                        'file_type': 'pdf',
                         **file_metadata
                     })
 
@@ -141,6 +339,31 @@ class DocumentProcessor:
 
             except Exception as e:
                 logger.error(f"Error loading {pdf_file.name}: {e}")
+                continue
+
+        if skipped_count > 0:
+            logger.info(f"Skipped {skipped_count} PDFs (cover pages or low content)")
+
+        # Load Markdown files
+        for md_file in doc_path.rglob("*.md"):
+            try:
+                logger.debug(f"Processing Markdown: {md_file.name}")
+                documents = self.load_markdown_file(md_file)
+                all_documents.extend(documents)
+
+            except Exception as e:
+                logger.error(f"Error loading {md_file.name}: {e}")
+                continue
+
+        # Load JSON files
+        for json_file in doc_path.rglob("*.json"):
+            try:
+                logger.debug(f"Processing JSON: {json_file.name}")
+                documents = self.load_json_file(json_file)
+                all_documents.extend(documents)
+
+            except Exception as e:
+                logger.error(f"Error loading {json_file.name}: {e}")
                 continue
 
         logger.info(f"Total documents loaded: {len(all_documents)}")
