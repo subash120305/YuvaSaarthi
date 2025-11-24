@@ -47,14 +47,23 @@ class TelegramBot:
             "en": f"""
 🎓 **Welcome to YuvaSaarthi!**
 
-Hello {user.first_name}! I'm your AI educational assistant.
+Hello {user.first_name}! 🙏 I'm YuvaSaarthi, AI Education Assistant for Rajasthan Department of Technical Education.
 
 **I can help you with:**
-• Admissions & Course Information
-• Exam Schedules & Results
-• Concept Explanations (Class 8-12)
-• Study Guidance & Tips
-• YouTube Video Recommendations
+
+📚 **Academic Subjects:**
+• Class 8-12: Math, Science, English, Hindi, Social Science
+• Engineering, Polytechnic, Technical Education
+
+🎓 **Admissions & Exams:**
+• RBSE exams, results, grading
+• College admissions, eligibility, application process
+• Fees, scholarships, reservation information
+
+📖 **Study Guidance:**
+• Exam preparation and study techniques
+• Career advice and education planning
+• YouTube video recommendations
 
 **Commands:**
 /help - Show all commands
@@ -62,18 +71,27 @@ Hello {user.first_name}! I'm your AI educational assistant.
 /videos - Toggle video recommendations
 /clear - Clear conversation history
 
-Ask me anything! 📚
+Ask me any education-related question! 😊
 """,
             "hi": f"""
 🎓 **युवासारथी में आपका स्वागत है!**
 
-नमस्ते {user.first_name}! मैं आपका AI शैक्षिक सहायक हूं।
+नमस्ते {user.first_name}! 🙏 मैं युवासारथी हूँ, राजस्थान तकनीकी शिक्षा विभाग का AI शिक्षा सहायक।
 
-**मैं आपकी मदद कर सकता हूं:**
-• प्रवेश और पाठ्यक्रम की जानकारी
-• परीक्षा कार्यक्रम और परिणाम
-• अवधारणाओं की व्याख्या (कक्षा 8-12)
-• अध्ययन मार्गदर्शन और सुझाव
+**मैं आपकी इन सभी चीज़ों में मदद कर सकता हूँ:**
+
+📚 **शैक्षणिक विषय:**
+• कक्षा 8-12: गणित, विज्ञान, अंग्रेजी, हिंदी, सामाजिक विज्ञान
+• इंजीनियरिंग, पॉलिटेक्निक, तकनीकी शिक्षा
+
+🎓 **प्रवेश और परीक्षाएं:**
+• RBSE परीक्षा, परिणाम, ग्रेडिंग
+• कॉलेज प्रवेश, पात्रता, आवेदन प्रक्रिया
+• फीस, छात्रवृत्ति, आरक्षण जानकारी
+
+📖 **अध्ययन मार्गदर्शन:**
+• परीक्षा की तैयारी और अध्ययन तकनीक
+• करियर सलाह और शिक्षा योजना
 • YouTube वीडियो सिफारिशें
 
 **कमांड:**
@@ -82,18 +100,27 @@ Ask me anything! 📚
 /videos - वीडियो सिफारिशें टॉगल करें
 /clear - वार्तालाप इतिहास साफ़ करें
 
-मुझसे कुछ भी पूछें! 📚
+मुझसे कोई भी शिक्षा संबंधी सवाल पूछें! 😊
 """,
             "raj": f"""
 🎓 **युवासारथी में थारो स्वागत है!**
 
-नमस्कार {user.first_name}! म्हैं थारो AI शिक्षा सहायक हूं।
+नमस्कार {user.first_name}! 🙏 म्हैं युवासारथी हूं, राजस्थान तकनीकी शिक्षा विभाग रो AI शिक्षा सहायक।
 
 **म्हैं थारी मदद कर सकूं:**
-• दाखिलो अर पाठ्यक्रम री जाणकारी
-• परीक्षा री तारीख अर नतीजा
-• अवधारणा री समझावण (कक्षा 8-12)
-• पढ़ाई री मार्गदर्शन
+
+📚 **शैक्षणिक विषय:**
+• कक्षा 8-12: गणित, विज्ञान, अंग्रेजी, हिंदी
+• इंजीनियरिंग, पॉलिटेक्निक, तकनीकी शिक्षा
+
+🎓 **दाखिलो अर परीक्षा:**
+• RBSE परीक्षा, नतीजा, ग्रेडिंग
+• कॉलेज दाखिलो, पात्रता, आवेदन प्रक्रिया
+• फीस, छात्रवृत्ति, आरक्षण री जाणकारी
+
+📖 **पढ़ाई री मार्गदर्शन:**
+• परीक्षा री तैयारी अर पढ़ाई री तकनीक
+• करियर सलाह अर शिक्षा योजना
 • YouTube वीडियो री सलाह
 
 **कमांड:**

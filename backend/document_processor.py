@@ -36,15 +36,21 @@ class DocumentProcessor:
             separators=["\n\n", "\n", "। ", "| ", " ", ""]
         )
 
-        # Initialize embeddings
-        logger.info(f"Loading embedding model: {settings.embedding_model}")
-        self.embeddings = HuggingFaceEmbeddings(
-            model_name=settings.embedding_model,
-            model_kwargs={'device': 'cpu'},
-            encode_kwargs={'normalize_embeddings': True}
-        )
-
+        # Lazy load embeddings (only when needed to save memory at startup)
+        self._embeddings = None
         self.vector_store: Optional[Chroma] = None
+
+    @property
+    def embeddings(self):
+        """Lazy load embeddings only when needed"""
+        if self._embeddings is None:
+            logger.info(f"Loading embedding model: {settings.embedding_model}")
+            self._embeddings = HuggingFaceEmbeddings(
+                model_name=settings.embedding_model,
+                model_kwargs={'device': 'cpu'},
+                encode_kwargs={'normalize_embeddings': True}
+            )
+        return self._embeddings
 
     def extract_metadata_from_filename(self, filename: str) -> Dict[str, str]:
         """
@@ -411,7 +417,7 @@ class DocumentProcessor:
 
     def load_vector_store(self) -> Optional[Chroma]:
         """
-        Load existing vector store
+        Load existing vector store with memory-efficient settings
 
         Returns:
             Chroma vector store or None if doesn't exist
@@ -422,8 +428,21 @@ class DocumentProcessor:
 
         try:
             logger.info("Loading existing vector store...")
+            # Use more memory-efficient settings for ChromaDB
+            import chromadb
+            from chromadb.config import Settings as ChromaSettings
+            
+            # Create client with reduced memory footprint
+            client = chromadb.PersistentClient(
+                path=self.vector_db_path,
+                settings=ChromaSettings(
+                    anonymized_telemetry=False,
+                    allow_reset=True
+                )
+            )
+            
             vector_store = Chroma(
-                persist_directory=self.vector_db_path,
+                client=client,
                 embedding_function=self.embeddings
             )
             logger.info("Vector store loaded successfully")
@@ -531,16 +550,29 @@ class DocumentProcessor:
 
 
 if __name__ == "__main__":
+    # Configure file logging for ingestion
+    from datetime import datetime
+    log_file = Path(__file__).parent.parent / "ingestion_log_new.txt"
+    logger.add(log_file, rotation="10 MB", retention="7 days", level="INFO")
+
     # Test document processing
     processor = DocumentProcessor()
 
     print("YuvaSaarthi - Document Processor")
     print("=" * 60)
+    logger.info("=" * 60)
+    logger.info("YuvaSaarthi - Document Ingestion Started")
+    logger.info(f"Timestamp: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    logger.info("=" * 60)
 
     # Ingest documents
     vector_store = processor.ingest_documents()
 
     if vector_store:
+        logger.info("=" * 60)
+        logger.info("Document Ingestion Completed Successfully!")
+        logger.info("=" * 60)
+
         # Test search
         test_query = "What is Pythagoras theorem?"
         print(f"\nTest Query: {test_query}")
@@ -550,3 +582,5 @@ if __name__ == "__main__":
             print(f"\n--- Result {i} ---")
             print(f"Source: {doc.metadata.get('source', 'Unknown')}")
             print(f"Content: {doc.page_content[:200]}...")
+    else:
+        logger.error("Document ingestion failed!")

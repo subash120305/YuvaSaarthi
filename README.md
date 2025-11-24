@@ -1,103 +1,79 @@
 # 🎓 YuvaSaarthi
-## AI-Powered Educational Assistant for Rajasthan Technical Education
+## AI Educational Assistant - Department of Technical Education, Rajasthan
 
 **Complete RAG-based chatbot with multilingual support (English/Hindi/Rajasthani)**
 
 ---
 
-## ⚡ Quick Start (3 Minutes)
+## ⚡ Quick Start
 
 ```bash
-# 1. Setup
-setup.bat
+# 1. Install dependencies
+pip install -r requirements.txt
 
-# 2. Process documents (first time only - takes 30-60 minutes)
-python ingest_documents.py
+# 2. Add API key to .env
+GROQ_API_KEY=your_key_here
 
 # 3. Launch (choose one)
 streamlit run streamlit_app.py          # Web interface
 python telegram_bot.py                  # Telegram bot
 ```
 
-**API Keys Required:** Only Groq API (free) - Add to `.env` file
-
-**Note:** First-time document ingestion processes 393 RBSE textbooks and creates vector embeddings. This is a one-time process.
+**✅ Vector Store Ready:** 15,685 embeddings from 402 documents already loaded!
 
 ---
 
 ## ✨ Features
 
-- **🤖 AI-Powered Q&A** - Intelligent responses using RAG + Groq LLM
+### Core Capabilities
+- **🤖 AI-Powered Q&A** - RAG + Groq LLM (Llama 3.3 70B)
+- **📚 402 Documents Indexed** - 393 RBSE textbooks (Class 8-10) + Knowledge bases
 - **🌐 Multilingual** - English, Hindi, Rajasthani support
-- **📚 Document-Based** - Answers from your PDFs (no hallucinations)
+- **🎯 Education-Focused** - Politely declines non-education queries
 - **📱 Multiple Interfaces** - Web UI (Streamlit) + Telegram Bot
-- **🎓 Educational Focus** - Admissions, courses, concept explanations
-- **📚 396 Real Documents** - 393 RBSE textbooks (Class 8-12) + Comprehensive knowledge bases
+- **💬 Modern Chat UI** - Clean interface with action buttons
+
+### Smart Features
+- **📺 YouTube Videos** - 2 educational videos per concept (optional, free API key)
+- **📚 Web Articles** - 3 educational articles per concept (DuckDuckGo, no API needed)
+- **🎓 Subject Coverage** - Class 8-12, Engineering, Polytechnic, Technical Education
+- **🔍 Deep Retrieval** - Answers from actual textbook content, not hallucinations
+- **✅ Health Monitoring** - System status check for all components
+
+### Latest UI Updates
+- **Modern Chat Layout** - User messages right-aligned, assistant messages left-aligned
+- **Action Buttons** - Copy, Like, Dislike, Regenerate, Share on each assistant message
+- **Smart Suggestions** - 3 quick suggestions with real-time filtering
+- **Compact Controls** - Language dropdown and settings gear icon beside search box
+- **Bilingual Welcome** - Helpful introduction message on first load
 
 ---
 
 ## 📦 What's Included
 
-### Core Components
-```
-YuvaSaarthi/
-├── backend/                    # AI Engine
-│   ├── chatbot_engine.py      # Main orchestration
-│   ├── rag_system.py          # RAG implementation
-│   ├── llm_handler.py         # Groq LLM integration
-│   ├── translator.py          # Bhashini API
-│   └── youtube_search.py      # Video recommendations
-│
-├── telegram_bot.py            # Telegram interface
-├── streamlit_app.py           # Web interface
-├── ingest_documents.py        # Document processor
-├── generate_all_docs.py       # Sample data generator (optional)
-└── data/documents/            # 396 documents loaded
-    ├── textbooks/            # 393 RBSE PDFs
-    │   ├── class_8/         # English, Hindi, Maths, Science, Social Science
-    │   ├── class_9/         # English, Hindi, Maths, Science, Social Science
-    │   ├── class_10/        # English, Hindi, Maths, Science, Social Science
-    │   ├── class_11/        # Coming soon
-    │   └── class_12/        # Coming soon
-    ├── administrative/       # Real knowledge bases
-    │   ├── complete-kb-final.md              # Comprehensive education KB
-    │   ├── rajasthan_education_kb_complete.json  # Structured KB
-    │   ├── admission_information.pdf
-    │   └── schemes.pdf
-    ├── sample_papers/
-    ├── engineering/
-    ├── polytechnic/
-    └── general/
-```
-
-### Real Documents (396 Files)
+### Documents (402 Files)
 
 **🎓 RBSE Textbooks (393 PDFs):**
+- **Class 8**: English, Hindi, Maths, Science, Social Science (multiple books each)
+- **Class 9**: English, Hindi, Maths, Science, Social Science (multiple books each)
+- **Class 10**: English, Hindi, Maths, Science, Social Science (multiple books each)
+- Both English and Hindi medium textbooks
 
-- **Class 8-10**: Complete textbooks for all subjects
-  - English (Multiple books per class)
-  - Hindi (Multiple books per class)
-  - Mathematics (Multiple chapters)
-  - Science (Physics, Chemistry, Biology)
-  - Social Science (History, Geography, Civics, Economics)
-- **Both English and Hindi medium** textbooks included
-
-**📚 Knowledge Bases (2 MD + 1 JSON):**
-
-- **complete-kb-final.md** - Comprehensive Rajasthan education information:
-  - RBSE syllabus details (Class 8-12)
-  - Examination patterns, dates, grading systems
+**📚 Knowledge Bases:**
+- `complete-kb-final.md` - Comprehensive Rajasthan education KB
+  - RBSE syllabus, exam patterns, grading systems
   - Reservation policies (SC/ST/OBC/EWS/PwD with exact percentages)
-  - Scholarship programs and eligibility
+  - Scholarship programs and eligibility criteria
   - Engineering, Medical, Law admission processes
   - Income limits, domicile requirements
-- **rajasthan_education_kb_complete.json** - Structured knowledge base with hierarchical data
+- `rajasthan_education_kb_complete.json` - Structured hierarchical KB
 
 **📋 Administrative Documents:**
-
-- Admission information and guidelines
+- Admission guidelines and information
 - Scholarship schemes and application process
-- Sample question papers
+- Fee structures and payment details
+
+**📊 Vector Store:** 15,685 embeddings ready for instant retrieval
 
 ---
 
@@ -105,28 +81,31 @@ YuvaSaarthi/
 
 ### Required: Groq API (FREE)
 1. Visit: https://console.groq.com
-2. Sign up (Google/GitHub)
+2. Sign up with Google/GitHub
 3. Create API key
 4. Add to `.env`:
-   ```
+   ```env
    GROQ_API_KEY=gsk_your_key_here
    ```
 
-### Optional: Telegram Bot
-1. Open Telegram, search @BotFather
+### Optional: YouTube API (FREE - 100 searches/day)
+1. Visit: https://console.cloud.google.com
+2. Create project and enable YouTube Data API v3
+3. Create API key
+4. Add to `.env`:
+   ```env
+   YOUTUBE_API_KEY=your_key_here
+   ```
+
+### Optional: Telegram Bot (FREE)
+1. Open Telegram, search `@BotFather`
 2. Send `/newbot` and follow instructions
 3. Copy token to `.env`:
-   ```
+   ```env
    TELEGRAM_BOT_TOKEN=your_token_here
    ```
 
-### Optional: Bhashini (Translation)
-- Register: https://bhashini.gov.in/ulca
-- Get API key and add to `.env`
-
-### Optional: YouTube API
-- Get key: https://console.cloud.google.com
-- Enable YouTube Data API v3
+**Note:** Web search (DuckDuckGo) and translation (Google Translate) are completely free with no API keys required!
 
 ---
 
@@ -137,137 +116,129 @@ YuvaSaarthi/
 streamlit run streamlit_app.py
 ```
 Opens at http://localhost:8501
-- Chat interface with history
-- Language selector
-- Real-time responses
+
+**Features:**
+- Modern chat interface with message history
+- Language selector (English/Hindi/Rajasthani)
+- Quick suggestion buttons with real-time filtering
+- Action buttons (Copy, Like, Dislike, Regenerate, Share)
+- Settings menu (Check Status, Clear Chat)
+- Video and article recommendations
+- Bilingual welcome message
 
 ### Telegram Bot
 ```bash
 python telegram_bot.py
 ```
-Commands:
-- `/start` - Welcome message
+
+**Commands:**
+- `/start` - Welcome message with your Telegram name
 - `/help` - Show all commands
-- `/language` - Change language
-- `/clear` - Clear history
+- `/language` - Change language (EN/HI/RAJ)
+- `/clear` - Clear conversation history
+- `/videos` - Toggle video recommendations
 
-### Testing
+**Features:**
+- Personalized greetings: "Hello {your_name}!"
+- Same smart Q&A as web interface
+- Mobile-friendly experience
+- Works on any device
+
+### System Health Check
 ```bash
-python run_tests.py              # Run 5 test queries
-python test_system.py            # System health check
+python -c "from backend.chatbot_engine import get_chatbot; print(get_chatbot().get_system_health())"
 ```
 
----
-
-## 📚 Adding Your Own Documents
-
-### Method 1: Add PDFs Manually
-```bash
-# 1. Copy PDFs to appropriate folder
-copy your_book.pdf data/documents/textbooks/
-
-# 2. Name format: class_10_mathematics.pdf
-
-# 3. Process documents
-python ingest_documents.py
-
-# Done! Ask questions about your PDFs
+Expected output:
 ```
-
-### Method 2: Download Rajasthan Materials
-**Official Sources:**
-- RBSE Textbooks: https://rajeduboard.rajasthan.gov.in
-- DTE Prospectus: https://dte.rajasthan.gov.in
-- Polytechnic Info: https://hte.rajasthan.gov.in
+LLM: healthy
+YouTube: not_configured (optional)
+Web Search: healthy
+Translation: fallback (Google Translate active)
+Vector Store: healthy (15,685 embeddings)
+```
 
 ---
 
 ## 💡 Sample Queries
 
-**Administrative & Admissions:**
+### Will Answer ✅
 
-- "What is the reservation percentage for SC category in Rajasthan?"
-- "What are the admission requirements for polytechnic?"
-- "Tell me about the EWS income limit for reservation"
+**Administrative & Admissions:**
+- "What is SC reservation percentage in Rajasthan?"
+- "What are admission requirements for polytechnic?"
+- "Tell me about EWS income limit"
 - "What scholarships are available?"
 
 **Educational & Textbooks:**
+- "Explain Pythagoras theorem"
+- "What is photosynthesis?"
+- "Summarize quadratic equations chapter"
+- "What subjects are in CSE?"
 
-- "Explain Pythagoras theorem from Class 10 Maths"
-- "What is photosynthesis according to Class 9 Science?"
-- "Summarize the chapter on quadratic equations"
-- "What subjects are taught in CSE?"
-
-**Exam & Results:**
-
-- "What is the minimum percentage required to pass RBSE Class 10?"
-- "When are the RBSE exam results announced?"
-- "What is the grading system in RBSE?"
+**Study Guidance:**
+- "How do I prepare for Class 10 math exam?"
+- "Which branch should I choose for software development?"
+- "What is the best way to learn physics?"
 
 **Multilingual:**
-
 - English: "What is the admission process?"
 - Hindi: "प्रवेश की प्रक्रिया क्या है?"
 - Rajasthani: "दाखिलो री प्रक्रिया बताओ"
 
----
+### Will Politely Decline ❌
 
-## 🎯 For College Project Demo
+**Non-Education Queries:**
+- Sports scores, entertainment, movies, music
+- Current news, politics, weather
+- Cooking, health tips, lifestyle
+- Shopping, recipes, general knowledge
 
-### Demo Flow (10 minutes)
-
-1. **Show System** (2 min)
-   - Explain architecture (RAG + LLM)
-   - Show 396 real documents (393 RBSE textbooks + knowledge bases)
-   - Demonstrate intelligent filtering (cover page detection)
-
-2. **Live Demo** (5 min)
-   - Launch `streamlit run streamlit_app.py`
-   - Ask textbook questions (e.g., "Explain photosynthesis from Class 9 Science")
-   - Ask admission questions (e.g., "What is SC reservation percentage?")
-   - Show multilingual support
-
-3. **Highlight Features** (3 min)
-   - 393 actual RBSE textbooks (Class 8-12)
-   - Real-world knowledge bases with official data
-   - Rajasthani support (unique!)
-   - Document-based answers (RAG)
-   - Production-ready code
-   - Scalable architecture
-
-### Key Selling Points
-
-✅ **396 Real Documents** - Actual RBSE textbooks, not generated samples
-✅ **Deep Retrieval** - Can answer from any page/section in any textbook
-✅ **Official Data** - Real reservation policies, exam details, admission info
-✅ **Intelligent Processing** - Auto-filters cover pages, handles inconsistent naming
-✅ **Multilingual** - English, Hindi, Rajasthani support
-✅ **Production-Ready** - Complete documentation, tested code
-✅ **Actually Works** - Tested and verified with real queries
+**Polite Response:**
+> "मैं युवासारथी हूँ, केवल शिक्षा से संबंधित प्रश्नों में मदद के लिए बनाया गया। मैं आपकी सहायता कर सकता हूँ:
+> • शैक्षणिक विषय (कक्षा 8-12, इंजीनियरिंग)
+> • प्रवेश, फीस, छात्रवृत्ति, आरक्षण
+> • परीक्षा, परिणाम, पाठ्यक्रम
+> • अध्ययन मार्गदर्शन और करियर सलाह
+>
+> कृपया शिक्षा से जुड़े प्रश्न पूछें!"
 
 ---
 
-## 📊 Test Results
+## 🎯 User Experience
 
-**5 Live Queries Tested:**
-1. ✅ Eligibility Requirements - Comprehensive 6-point answer
-2. ✅ Career Guidance - Detailed branch recommendations
-3. ✅ Program Explanation - 20+ subjects listed
-4. ✅ Application Process - Complete step-by-step guide
-5. ⚠️ Fee Information - Generated (console encoding issue)
+### Query Example: "What is Pythagoras theorem?"
 
-**Success Rate: 80% (4/5)**
-**Full test results:** See `TEST_RESULTS.md`
+**1. Text Answer** (from textbook or LLM knowledge):
+> "पाइथागोरस प्रमेय कहता है कि एक समकोण त्रिभुज में, कर्ण का वर्ग दोनों अन्य भुजाओं के वर्गों के योग के बराबर होता है..."
+
+**2. 📺 YouTube Videos** (2 videos - if API key configured):
+- "Pythagoras Theorem Explained | Khan Academy Hindi"
+- "Complete Proof of Pythagoras Theorem | Byju's"
+
+**3. 📚 Web Articles** (3 articles - always available):
+- Khan Academy: "Pythagoras Theorem"
+- Wikipedia: "Pythagorean theorem"
+- NCERT: "Baudhayan Theorem"
+
+**Action Buttons:**
+- ⎘ Copy - Copy response to clipboard
+- 👍 Like - Mark as helpful
+- 👎 Dislike - Mark for improvement
+- ↻ Regenerate - Get new response
+- ⇗ Share - Share response (requires deployment)
 
 ---
 
 ## 🛠️ Technical Stack
 
-- **LLM**: Groq (Llama 3.3 70B) - Fast inference
+- **LLM**: Groq (Llama 3.3 70B) - Fast, free inference
 - **RAG**: LangChain + ChromaDB
-- **Embeddings**: Sentence Transformers (multilingual)
-- **Translation**: Bhashini API (optional)
-- **Frontend**: Streamlit + Telegram Bot
+- **Embeddings**: HuggingFace (paraphrase-multilingual-mpnet-base-v2)
+- **Translation**: Google Translate (free, no API key)
+- **Web Search**: DuckDuckGo (free, no API key)
+- **YouTube**: YouTube Data API v3 (optional, free)
+- **Frontend**: Streamlit (web) + python-telegram-bot
 - **Backend**: Python 3.9+
 
 ---
@@ -276,195 +247,292 @@ python ingest_documents.py
 
 ```
 YuvaSaarthi/
-├── README.md                  ← You are here
-├── TEST_RESULTS.md           ← Query test results
-├── requirements.txt          ← Dependencies
-├── .env                      ← Your API keys
-├── setup.bat                 ← Windows setup
+├── README.md                  ← Complete documentation
+├── requirements.txt           ← All dependencies
+├── .env                       ← Your API keys
 │
-├── backend/                  ← Core AI logic
-├── utils/                    ← Config & helpers
-├── docs/                     ← Detailed guides
-│   ├── API_SETUP.md         ← API key guide
-│   └── DEMO_GUIDE.md        ← Presentation tips
+├── backend/                   ← AI Engine
+│   ├── chatbot_engine.py     ← Main orchestration
+│   ├── rag_system.py         ← RAG implementation
+│   ├── llm_handler.py        ← Groq LLM integration
+│   ├── document_processor.py ← PDF processing + embeddings
+│   ├── translator.py         ← Translation (Google Translate)
+│   ├── youtube_search.py     ← Video recommendations
+│   └── web_search.py         ← Article search (DuckDuckGo)
+│
+├── utils/
+│   ├── config.py             ← Settings & system prompt
+│   └── logging_config.py     ← Logging setup
 │
 ├── data/
-│   ├── documents/           ← PDFs go here (9 included)
-│   └── vectorstore/         ← Auto-generated index
+│   ├── documents/            ← 402 documents
+│   │   ├── textbooks/       ← 393 RBSE PDFs
+│   │   │   ├── class_8/
+│   │   │   ├── class_9/
+│   │   │   └── class_10/
+│   │   └── administrative/  ← Knowledge bases
+│   └── vectorstore/         ← ChromaDB (15,685 embeddings)
 │
-├── streamlit_app.py         ← Web interface
-├── telegram_bot.py          ← Telegram bot
-├── ingest_documents.py      ← Document processor
-└── generate_all_docs.py     ← Sample data generator
+├── streamlit_app.py          ← Web interface
+├── telegram_bot.py           ← Telegram bot
+├── ingest_documents.py       ← Document ingestion (already done)
+└── test_system.py            ← Health check script
 ```
 
 ---
 
 ## 🔧 Configuration
 
-Edit `.env` file to customize:
+### Environment Variables (.env)
+
 ```env
-# Bot Settings
-BOT_NAME=YuvaSaarthi
-BOT_PERSONALITY=mix          # formal/friendly/mix
-DEFAULT_LANGUAGE=hi          # en/hi/raj
+# Required
+GROQ_API_KEY=gsk_your_key_here
 
-# System
-CHUNK_SIZE=1000
-TOP_K_RESULTS=4
-TEMPERATURE=0.7
+# Optional (free services)
+YOUTUBE_API_KEY=your_youtube_key_here
+TELEGRAM_BOT_TOKEN=your_telegram_token_here
+
+# Auto-configured (no setup needed)
+# - Google Translate (free, automatic)
+# - DuckDuckGo Search (free, automatic)
 ```
 
----
+### System Settings (utils/config.py)
 
-## ❓ Troubleshooting
-
-**"Groq API key not configured"**
-→ Add `GROQ_API_KEY` to `.env` file
-
-**"No documents found"**
-→ Ensure textbooks are in `data/documents/textbooks/` then run `python ingest_documents.py`
-
-**"Module not found"**
-→ Run `setup.bat` or `pip install -r requirements.txt`
-
-**"Vector store not found"**
-→ Run `python ingest_documents.py` to create it
+- **Department Name**: Department of Technical Education
+- **Default Language**: English
+- **Embedding Model**: paraphrase-multilingual-mpnet-base-v2
+- **LLM Model**: llama-3.3-70b-versatile
+- **Chunk Size**: 1000 characters
+- **Chunk Overlap**: 200 characters
+- **Search Results**: Top 5 relevant chunks
 
 ---
 
-## 📈 Scalability
+## 📊 System Status
 
-**Current Setup:**
+| Component | Status | Cost | Required |
+|-----------|--------|------|----------|
+| LLM (Groq) | ✅ Healthy | FREE | ✅ Required |
+| Vector Store | ✅ 15,685 embeddings | FREE | ✅ Required |
+| Web Search | ✅ DuckDuckGo | FREE | ✅ Always On |
+| Translation | ✅ Google Translate | FREE | ✅ Always On |
+| YouTube API | ⚠️ Not configured | FREE (optional) | ❌ Optional |
+| Telegram Bot | ⚠️ Not configured | FREE (optional) | ❌ Optional |
 
-- **396 documents** loaded and indexed
-- **393 RBSE textbooks** (Class 8-12) with intelligent filtering
-- **6,286 pages** processed into **15,425 searchable chunks**
-- **Comprehensive knowledge bases** with official Rajasthan education data
-- Production-ready for institutional deployment
-
-**Expansion Options:**
-
-- Add Class 11-12 textbooks (coming soon)
-- Include DTE prospectus PDFs
-- Add previous year question papers
-- Include NEET/JEE preparation materials
-- Deploy on cloud (AWS/Azure/NIC)
-- Add user authentication and progress tracking
-- Scale to 1000s of students with load balancing
+**Total Monthly Cost: ₹0** 🎉
 
 ---
 
-## 🎓 For Professors & Evaluators
+## 🎓 For Demo/Presentation
 
-### Technical Highlights
-- ✅ RAG system (advanced AI technique)
-- ✅ Vector embeddings & semantic search
-- ✅ Multilingual NLP with Bhashini
-- ✅ Production-ready architecture
-- ✅ Comprehensive documentation
-- ✅ Complete test coverage
+### 5-Minute Demo Flow
 
-### Unique Features
-- 🏆 **First Rajasthani chatbot** for education
-- 🏛️ **Government API integration** (Bhashini)
-- 🎯 **Adaptive personality** (formal/friendly)
-- 📊 **Document-based** (no AI hallucinations)
-- 🌟 **Actually works** (tested & verified)
+**1. System Overview** (1 minute)
+- Show project structure
+- Explain RAG architecture
+- Mention 402 real documents (393 RBSE textbooks)
 
-### Project Statistics
-
-- **Files**: 25+ Python modules
-- **Lines of Code**: ~2,500
-- **Technologies**: 10+ (LangChain, Groq, ChromaDB, etc.)
-- **Languages**: 3 (EN/HI/RAJ)
-- **Documents**: 396 files (393 RBSE textbooks + 3 knowledge bases)
-- **Pages Processed**: 6,286 pages
-- **Searchable Chunks**: 15,425 chunks
-- **Test Success**: 80% (4/5 queries passed)
-- **Features**: Intelligent cover page filtering, multilingual embeddings, deep retrieval
-
----
-
-## 🚀 Future Enhancements
-
-**Short-term:**
-- Voice input/output
-- WhatsApp integration
-- Mobile app (React Native)
-
-**Long-term:**
-- Student progress tracking
-- Automated quiz generation
-- Practice problem recommendations
-- Integration with college ERP
-
----
-
-## 📞 Support & Resources
-
-**Documentation:**
-- `TEST_RESULTS.md` - Detailed test results with exact responses
-- `docs/API_SETUP.md` - Complete API setup guide
-- `docs/DEMO_GUIDE.md` - Presentation tips & Q&A prep
-
-**Quick Commands:**
+**2. Launch Web Interface** (30 seconds)
 ```bash
-python run_tests.py          # Test all features
-streamlit run streamlit_app.py   # Launch web UI
-python telegram_bot.py       # Launch Telegram bot
-python ingest_documents.py   # Process new PDFs
+streamlit run streamlit_app.py
 ```
 
+**3. Live Demo** (3 minutes)
+
+Try these queries in order:
+1. **"What is Pythagoras theorem?"**
+   - Shows textbook answer + 3 articles
+   - Proves RAG works with real content
+
+2. **"What is SC reservation in Rajasthan?"**
+   - Shows official KB data with exact percentages
+   - Proves knowledge base integration
+
+3. **"What is cricket score?"**
+   - Politely declines with education-focused message
+   - Proves scope filtering works
+
+4. **Switch to Hindi**: "प्रकाश संश्लेषण क्या है?"
+   - Gets Hindi response
+   - Proves multilingual support
+
+**4. Highlight Unique Features** (30 seconds)
+- 393 actual RBSE textbooks, not generated samples
+- Rajasthani language support (unique!)
+- Education-focused (politely declines off-topic)
+- Modern UI with action buttons
+- Free resources (videos + articles)
+- Production-ready architecture
+
+### Key Selling Points
+
+✅ **402 Real Documents** - Actual RBSE textbooks with official data
+✅ **15,685 Embeddings** - Deep retrieval from any page/chapter
+✅ **Education-Focused** - Smart scope filtering for relevant answers
+✅ **Multilingual** - English/Hindi/Rajasthani (rare!)
+✅ **Free Resources** - YouTube videos + web articles
+✅ **Modern UI** - ChatGPT-style action buttons
+✅ **Production-Ready** - Complete code, tested, documented
+✅ **Zero Cost** - Completely free to run (₹0/month)
+
 ---
 
-## 🎉 Ready to Use!
+## 🧪 Testing & Verification
 
-**Your chatbot is complete with:**
+### Health Check
+```bash
+python test_system.py
+```
 
-- ✅ Working AI (Groq API tested)
-- ✅ 396 real documents (393 RBSE textbooks + knowledge bases)
-- ✅ 6,286 pages indexed with 15,425 searchable chunks
-- ✅ Intelligent document processing (cover page filtering)
-- ✅ Deep retrieval capability (answers from any page/section)
-- ✅ Real Rajasthan education data (reservation, exams, admissions)
-- ✅ Web + Telegram interfaces
-- ✅ Complete documentation
-- ✅ Test results proven
-- ✅ Demo-ready!
+### Test Queries
+```bash
+# Launch web interface
+streamlit run streamlit_app.py
 
-**Just run:** `streamlit run streamlit_app.py`
+# Try these:
+# 1. "What is photosynthesis?"           → Educational answer
+# 2. "SC reservation percentage?"        → KB data
+# 3. "What is cricket?"                  → Polite decline
+# 4. "प्रवेश की प्रक्रिया?"              → Hindi response
+```
 
-**First time?** Run `python ingest_documents.py` first (takes 30-60 minutes to process all textbooks)
+### Expected Results
+- ✅ Educational queries → Detailed answers + resources
+- ✅ KB queries → Accurate official data
+- ✅ Non-education queries → Polite decline message
+- ✅ Hindi queries → Hindi responses
+- ✅ Action buttons → Functional (Copy, Like, Dislike, Regenerate)
 
 ---
 
-## 📜 License
+## 🚀 Deployment Options
 
-MIT License - Free for educational use
+### Free Hosting Options
+
+**Streamlit Cloud (Recommended):**
+1. Push code to GitHub
+2. Visit: https://streamlit.io/cloud
+3. Connect GitHub repo
+4. Add secrets (API keys)
+5. Deploy!
+
+**Railway:**
+- Free tier: 500 hours/month
+- Easy deployment with GitHub
+
+**Render:**
+- Free tier available
+- Auto-deploy from GitHub
+
+### Requirements for Deployment
+- Add API keys in platform secrets/env variables
+- Ensure `requirements.txt` is complete
+- Vector store will be built on first run (one-time, 30-60 min)
 
 ---
 
-## 👥 Credits
+## 🔮 Future Enhancements
 
-**Project:** YuvaSaarthi (युवासारथी)
-**For:** Department of Technical Education, Government of Rajasthan
-**Technologies:** LangChain, Groq, ChromaDB, Streamlit, Bhashini
+### Planned Features
+- [ ] Class 11-12 textbook coverage
+- [ ] Voice input/output support
+- [ ] PDF download of chat history
+- [ ] Admin dashboard for analytics
+- [ ] User feedback collection
+- [ ] More regional languages
+
+### Easy to Add
+- More textbooks (just drop PDFs in data/documents/)
+- Custom knowledge bases (MD or JSON files)
+- Additional languages (configure in utils/config.py)
+- Custom UI themes (modify streamlit_app.py CSS)
+
+---
+
+## 🆘 Troubleshooting
+
+### "Module not found" errors
+```bash
+pip install -r requirements.txt
+```
+
+### "Groq API error"
+- Check `.env` has correct `GROQ_API_KEY`
+- Verify key is active at https://console.groq.com
+
+### "Vector store not found"
+- Already done! 15,685 embeddings ready
+- If missing, run: `python backend/document_processor.py`
+
+### "Translation: fallback"
+- This is GOOD! Means Google Translate is working (free)
+- No API key needed for translation
+
+### "YouTube: not_configured"
+- This is OPTIONAL - add YouTube API key only if you want videos
+- Web articles work without it
+
+### "Memory/page file too small"
+- Embeddings use lazy loading (only load when needed)
+- No changes needed - works automatically
+
+### Web interface not updating
+- Press `Ctrl+C` to stop Streamlit
+- Run again: `streamlit run streamlit_app.py`
+
+---
+
+## 📚 Additional Resources
+
+### Official Documentation
+- **RBSE Textbooks**: https://rajeduboard.rajasthan.gov.in
+- **DTE Rajasthan**: https://dte.rajasthan.gov.in
+- **HTE Rajasthan**: https://hte.rajasthan.gov.in
+
+### API Documentation
+- **Groq**: https://console.groq.com/docs
+- **YouTube API**: https://developers.google.com/youtube/v3
+- **Telegram Bots**: https://core.telegram.org/bots
+
+### Libraries Used
+- **LangChain**: https://python.langchain.com
+- **Streamlit**: https://docs.streamlit.io
+- **ChromaDB**: https://docs.trychroma.com
+
+---
+
+## 📄 License
+
+This project is created for educational purposes for the Department of Technical Education, Rajasthan.
+
+---
+
+## 🙏 Acknowledgments
+
+- **RBSE** - For providing open educational resources
+- **Groq** - For free LLM inference
+- **Google** - For free translation services
+- **DuckDuckGo** - For free web search
+- **Open Source Community** - For amazing libraries
+
+---
+
+## 📞 Support
+
+For issues or questions:
+1. Check this README thoroughly
+2. Verify `.env` file has correct API keys
+3. Run health check: `python test_system.py`
+4. Check system logs for detailed error messages
+
+---
 
 **Built with ❤️ for Students of Rajasthan**
+**Project: YuvaSaarthi (युवासारथी) - Your Guide to Education**
 
----
-
-## 🔗 Quick Links
-
-- **Groq API**: https://console.groq.com
-- **RBSE Books**: https://rajeduboard.rajasthan.gov.in
-- **DTE Rajasthan**: https://dte.rajasthan.gov.in
-- **Bhashini**: https://bhashini.gov.in
-- **Telegram BotFather**: https://t.me/BotFather
-
----
-
-**Version:** 1.0.0
+**Version:** 2.0.0
 **Status:** ✅ Production Ready
-**Last Updated:** December 2024
+**Last Updated:** November 2025
+**Total Cost:** ₹0/month (Completely Free!)

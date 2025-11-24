@@ -4,6 +4,7 @@ Processes all PDFs and creates vector database
 """
 
 import sys
+import argparse
 from pathlib import Path
 from loguru import logger
 
@@ -13,6 +14,12 @@ from utils.config import DOCUMENTS_DIR, VECTOR_DB_DIR
 
 def main():
     """Main ingestion function"""
+    # Parse command line arguments
+    parser = argparse.ArgumentParser(description='Ingest documents into vector database')
+    parser.add_argument('--auto-yes', '-y', action='store_true',
+                        help='Automatically answer yes to all prompts')
+    args = parser.parse_args()
+
     print("\n" + "=" * 60)
     print("YuvaSaarthi - Document Ingestion")
     print("=" * 60 + "\n")
@@ -60,10 +67,13 @@ def main():
     print("\n" + "-" * 60)
 
     # Ask for confirmation
-    response = input("\nProceed with ingestion? (yes/no): ").strip().lower()
-    if response not in ['yes', 'y']:
-        print("\n[CANCELLED] Ingestion cancelled")
-        return
+    if not args.auto_yes:
+        response = input("\nProceed with ingestion? (yes/no): ").strip().lower()
+        if response not in ['yes', 'y']:
+            print("\n[CANCELLED] Ingestion cancelled")
+            return
+    else:
+        print("\nAuto-yes mode: Proceeding with ingestion...")
 
     print("\n" + "-" * 60)
     print("Starting document ingestion...")
@@ -77,8 +87,12 @@ def main():
         force_refresh = False
         if VECTOR_DB_DIR.exists():
             print("[WARNING] Existing vector store found")
-            response = input("Recreate vector store? (yes/no): ").strip().lower()
-            force_refresh = response in ['yes', 'y']
+            if not args.auto_yes:
+                response = input("Recreate vector store? (yes/no): ").strip().lower()
+                force_refresh = response in ['yes', 'y']
+            else:
+                print("Auto-yes mode: Recreating vector store...")
+                force_refresh = True
 
         # Ingest documents
         print("\nProcessing documents...")

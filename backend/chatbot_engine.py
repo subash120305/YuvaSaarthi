@@ -14,6 +14,7 @@ from backend.document_processor import DocumentProcessor
 from backend.llm_handler import LLMHandler
 from backend.translator import TranslationManager
 from backend.youtube_search import YouTubeSearcher
+from backend.web_search import WebSearcher
 from utils.language_detector import LanguageDetector
 from utils.config import settings
 
@@ -29,6 +30,7 @@ class ChatbotEngine:
         self.llm = LLMHandler()
         self.translator = TranslationManager()
         self.youtube = YouTubeSearcher()
+        self.web_search = WebSearcher()
         self.language_detector = LanguageDetector()
 
         # Conversation history storage (in-memory for now)
@@ -46,7 +48,7 @@ class ChatbotEngine:
         query: str,
         user_id: str,
         language: Optional[str] = None,
-        include_videos: bool = True
+        include_resources: bool = True
     ) -> Dict[str, any]:
         """
         Process user query and generate response
@@ -55,10 +57,10 @@ class ChatbotEngine:
             query: User's question
             user_id: Unique user identifier
             language: Preferred language (en, hi, raj) or None for auto-detect
-            include_videos: Whether to include YouTube video recommendations
+            include_resources: Whether to include YouTube videos and web articles
 
         Returns:
-            Dict with response, videos, language info
+            Dict with response, videos, articles, language info
         """
         try:
             # Detect language if not specified
@@ -92,18 +94,26 @@ class ChatbotEngine:
             # Check if this is a concept explanation query
             is_study_query = self._is_study_query(query)
 
-            # Search for YouTube videos if appropriate
+            # Search for learning resources if appropriate
             videos = []
-            if include_videos and is_study_query and self.youtube.is_configured:
-                videos = self.youtube.search_videos(query, language=language, max_results=3)
-                logger.info(f"Found {len(videos)} YouTube videos")
+            articles = []
+            if include_resources and is_study_query:
+                # Fetch top 2 YouTube videos (if API configured)
+                if self.youtube.is_configured:
+                    videos = self.youtube.search_videos(query, language=language, max_results=2)
+                    logger.info(f"Found {len(videos)} YouTube videos")
+
+                # Fetch top 3 educational articles (always available - DuckDuckGo)
+                articles = self.web_search.search_articles(query, language=language, max_results=3)
+                logger.info(f"Found {len(articles)} web articles")
 
             return {
                 "response": response,
                 "videos": videos,
+                "articles": articles,
                 "language": language,
                 "context_used": bool(context),
-                "video_count": len(videos)
+                "resource_count": len(videos) + len(articles)
             }
 
         except Exception as e:
@@ -111,9 +121,10 @@ class ChatbotEngine:
             return {
                 "response": "I apologize, but I encountered an error processing your query. Please try again.",
                 "videos": [],
+                "articles": [],
                 "language": language or "en",
                 "context_used": False,
-                "video_count": 0,
+                "resource_count": 0,
                 "error": str(e)
             }
 
@@ -288,6 +299,7 @@ class ChatbotEngine:
         return {
             "llm": self.llm.check_health(),
             "youtube": self.youtube.check_health(),
+            "web_search": self.web_search.check_health(),
             "translation": {"status": "healthy" if self.translator.is_translation_available() else "fallback"},
             "vector_store": {"status": "healthy" if self.vector_store else "not_initialized"},
             "bot_name": settings.bot_name,
@@ -326,14 +338,14 @@ if __name__ == "__main__":
     print("\n" + "=" * 60)
 
     # Test query
-    test_query = "पाइथागोरस प्रमेय क्या है?"
+    test_query = "What is Pythagoras theorem?"
     print(f"\nTest Query: {test_query}\n")
 
     result = bot.process_query(
         query=test_query,
         user_id="test_user",
         language="auto",
-        include_videos=True
+        include_resources=True
     )
 
     print(f"Language Detected: {result['language']}")
@@ -342,3 +354,6 @@ if __name__ == "__main__":
 
     if result['videos']:
         print(f"\n{bot.youtube.format_videos_for_display(result['videos'], result['language'])}")
+
+    if result['articles']:
+        print(f"\n{bot.web_search.format_articles_for_display(result['articles'], result['language'])}")

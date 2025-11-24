@@ -187,7 +187,16 @@ class BhashiniTranslator:
 
 
 class FallbackTranslator:
-    """Fallback translator when Bhashini is not available"""
+    """Fallback translator using Google Translate (free, no API key needed)"""
+
+    def __init__(self):
+        try:
+            from deep_translator import GoogleTranslator
+            self.google_available = True
+            logger.info("Google Translate (deep-translator) initialized successfully")
+        except ImportError:
+            self.google_available = False
+            logger.warning("deep-translator not installed. Translation will be limited.")
 
     def translate(
         self,
@@ -196,17 +205,39 @@ class FallbackTranslator:
         target_lang: LanguageCode
     ) -> str:
         """
-        Simple fallback - returns original text
-        In production, this could use another translation service
+        Translate using Google Translate (free)
+        Falls back to original text if translation fails
         """
         if source_lang == target_lang:
             return text
 
-        logger.warning(
-            f"Fallback translator: Cannot translate {source_lang} -> {target_lang}. "
-            "Returning original text."
-        )
-        return text
+        if not self.google_available:
+            logger.debug(f"Google Translate not available. Returning original text.")
+            return text
+
+        try:
+            from deep_translator import GoogleTranslator
+
+            # Map language codes
+            lang_map = {
+                "en": "en",
+                "hi": "hi",
+                "raj": "hi"  # Use Hindi for Rajasthani
+            }
+
+            source = lang_map.get(source_lang, "auto")
+            target = lang_map.get(target_lang, "en")
+
+            # Translate using Google Translate (FREE)
+            translator = GoogleTranslator(source=source, target=target)
+            translated = translator.translate(text)
+
+            logger.debug(f"Google Translate: {source_lang} -> {target_lang}")
+            return translated if translated else text
+
+        except Exception as e:
+            logger.warning(f"Google Translate error: {e}. Returning original text.")
+            return text
 
 
 class TranslationManager:
