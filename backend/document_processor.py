@@ -1,6 +1,6 @@
 """
 Document Processing and Ingestion System
-Handles PDFs and creates vector embeddings
+Handles PDFs, Markdown files and creates vector embeddings
 """
 
 import os
@@ -9,9 +9,10 @@ from pathlib import Path
 from typing import List, Dict, Optional
 from loguru import logger
 
-from langchain.document_loaders import PyPDFLoader, DirectoryLoader
-from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain.schema import Document
+# Fixed imports for LangChain 1.0+
+from langchain_community.document_loaders import PyPDFLoader, TextLoader
+from langchain_text_splitters import RecursiveCharacterTextSplitter
+from langchain_core.documents import Document
 from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_community.vectorstores import Chroma
 
@@ -95,9 +96,10 @@ class DocumentProcessor:
     def load_documents(self, category: Optional[str] = None) -> List[Document]:
         """
         Load documents from the documents directory
+        Supports: PDF, Markdown (.md), Text (.txt)
 
         Args:
-            category: Optional category to load (textbooks, admissions, etc.)
+            category: Optional category to load (textbooks, knowledge_base, etc.)
 
         Returns:
             List of Document objects
@@ -114,34 +116,65 @@ class DocumentProcessor:
         logger.info(f"Loading documents from: {doc_path}")
 
         all_documents = []
+        file_extensions = ["*.pdf", "*.md", "*.txt"]
+        
+        # Process each file type
+        for ext_pattern in file_extensions:
+            for file_path in doc_path.rglob(ext_pattern):
+                try:
+                    logger.debug(f"Processing: {file_path.name}")
+                    
+                    # Select appropriate loader based on file extension
+                    if file_path.suffix.lower() == '.pdf':
+                        loader = PyPDFLoader(str(file_path))
+                    elif file_path.suffix.lower() == '.md':
+                        try:
+                            loader = UnstructuredMarkdownLoader(str(file_path))
+                        except Exception as e:
+                            logger.warning(f"UnstructuredMarkdownLoader failed for {file_path.name}, using TextLoader: {e}")
+                            loader = TextLoader(str(file_path), encoding='utf-8')
+                    elif file_path.suffix.lower() == '.txt':
+                        loader = TextLoader(str(file_path), encoding='utf-8')
+                    else:
+                        logger.warning(f"Unsupported file type: {file_path.suffix}")
+                        continue
 
-        # Walk through directory structure
-        for pdf_file in doc_path.rglob("*.pdf"):
-            try:
-                logger.debug(f"Processing: {pdf_file.name}")
+                    # Load documents
+                    try:
+                        documents = loader.load()
+                    except Exception as e:
+                        logger.error(f"Error loading {file_path.name}: {e}")
+                        # Try with different encoding for text files
+                        if file_path.suffix.lower() in ['.md', '.txt']:
+                            try:
+                                loader = TextLoader(str(file_path), encoding='latin-1')
+                                documents = loader.load()
+                                logger.info(f"Successfully loaded {file_path.name} with latin-1 encoding")
+                            except Exception as e2:
+                                logger.error(f"Failed to load {file_path.name} with alternative encoding: {e2}")
+                                continue
+                        else:
+                            continue
 
-                # Load PDF
-                loader = PyPDFLoader(str(pdf_file))
-                documents = loader.load()
+                    # Extract metadata
+                    file_metadata = self.extract_metadata_from_filename(file_path.stem)
+                    category = self.get_category_from_path(file_path)
 
-                # Extract metadata
-                file_metadata = self.extract_metadata_from_filename(pdf_file.stem)
-                category = self.get_category_from_path(pdf_file)
+                    # Add metadata to each document
+                    for doc in documents:
+                        doc.metadata.update({
+                            'source': file_path.name,
+                            'file_type': file_path.suffix[1:],  # Remove the dot
+                            'category': category,
+                            **file_metadata
+                        })
 
-                # Add metadata to each document
-                for doc in documents:
-                    doc.metadata.update({
-                        'source': pdf_file.name,
-                        'category': category,
-                        **file_metadata
-                    })
+                    all_documents.extend(documents)
+                    logger.info(f"✓ Loaded {len(documents)} page(s) from {file_path.name}")
 
-                all_documents.extend(documents)
-                logger.info(f"Loaded {len(documents)} pages from {pdf_file.name}")
-
-            except Exception as e:
-                logger.error(f"Error loading {pdf_file.name}: {e}")
-                continue
+                except Exception as e:
+                    logger.error(f"✗ Error processing {file_path.name}: {e}")
+                    continue
 
         logger.info(f"Total documents loaded: {len(all_documents)}")
         return all_documents

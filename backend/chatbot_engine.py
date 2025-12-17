@@ -12,7 +12,7 @@ sys.path.append(str(Path(__file__).parent.parent))
 
 from backend.document_processor import DocumentProcessor
 from backend.llm_handler import LLMHandler
-from backend.translator import TranslationManager
+from backend.google_translator import TranslationManager  # Changed to Google Translator
 from backend.youtube_search import YouTubeSearcher
 from utils.language_detector import LanguageDetector
 from utils.config import settings
@@ -85,6 +85,11 @@ class ChatbotEngine:
                 language=language,
                 conversation_history=history
             )
+
+            # Translate response back to user's language if needed
+            if language != "en":
+                response = self.translator.translate(response, "en", language)
+                logger.debug(f"Translated response to {language}")
 
             # Update conversation history
             self._update_history(user_id, query, response)

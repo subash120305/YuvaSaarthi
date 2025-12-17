@@ -13,7 +13,7 @@ from utils.config import settings, SUPPORTED_LANGUAGES
 
 # Page configuration
 st.set_page_config(
-    page_title="YuvaSaarthi - AI Educational Assistant",
+    page_title="YuvaSaarthi - National Education Assistant",
     page_icon="🎓",
     layout="wide",
     initial_sidebar_state="expanded"
@@ -108,9 +108,9 @@ def main():
     """Main Streamlit app"""
 
     # Header
-    st.markdown('<h1 class="main-header">🎓 YuvaSaarthi</h1>', unsafe_allow_html=True)
+    st.markdown('<h1 class="main-header">🎓 YuvaSaarthi - National Education Assistant</h1>', unsafe_allow_html=True)
     st.markdown(
-        f'<p class="sub-header">AI Educational Assistant - {settings.department_name}</p>',
+        '<p class="sub-header">AI-Powered Educational Assistant for Students of India 🇮🇳</p>',
         unsafe_allow_html=True
     )
 
@@ -118,22 +118,41 @@ def main():
     with st.sidebar:
         st.header("⚙️ Settings")
 
-        # Language selection
-        language_options = {
-            "en": "🇬🇧 English",
-            "hi": "🇮🇳 हिंदी",
-            "raj": "🏜️ राजस्थानी"
-        }
-
-        selected_lang = st.selectbox(
-            "Language / भाषा",
-            options=list(language_options.keys()),
-            format_func=lambda x: language_options[x],
-            index=list(language_options.keys()).index(st.session_state.language)
+        # Language selection with all Indian languages
+        from utils.indian_languages import (
+            SUPPORTED_INDIAN_LANGUAGES,
+            get_language_display_name,
+            get_popular_languages
         )
+        
+        popular_langs = get_popular_languages()
+        all_langs = list(SUPPORTED_INDIAN_LANGUAGES.keys())
+        
+        st.write("**Popular Languages:**")
+        popular_options = {lang: get_language_display_name(lang) for lang in popular_langs}
+        
+        selected_lang = st.selectbox(
+            "भाषा चुनें / Select Language",
+            options=popular_langs,
+            format_func=lambda x: popular_options[x],
+            index=popular_langs.index(st.session_state.language) if st.session_state.language in popular_langs else 0
+        )
+
+        # Show all languages in expander
+        with st.expander("🌏 All 22 Indian Languages"):
+            st.write("**Complete List:**")
+            for lang_code in sorted(all_langs, key=lambda x: SUPPORTED_INDIAN_LANGUAGES[x]['name']):
+                if st.button(
+                    get_language_display_name(lang_code),
+                    key=f"lang_{lang_code}",
+                    use_container_width=True
+                ):
+                    selected_lang = lang_code
+                    st.rerun()
 
         if selected_lang != st.session_state.language:
             st.session_state.language = selected_lang
+            st.success(f"Language changed to {SUPPORTED_INDIAN_LANGUAGES[selected_lang]['name']}")
             st.rerun()
 
         # Video recommendations toggle
@@ -167,33 +186,15 @@ def main():
 
         st.divider()
 
-        # Quick actions
+        # Quick actions with language-specific queries
         st.header("⚡ Quick Actions")
-
-        sample_queries = {
-            "en": [
-                "What are the admission requirements?",
-                "Explain Pythagoras theorem",
-                "When are the exams?",
-                "Tell me about scholarship programs"
-            ],
-            "hi": [
-                "प्रवेश की आवश्यकताएं क्या हैं?",
-                "पाइथागोरस प्रमेय समझाओ",
-                "परीक्षाएं कब हैं?",
-                "छात्रवृत्ति कार्यक्रमों के बारे में बताओ"
-            ],
-            "raj": [
-                "दाखिलो री जरूरत कांई है?",
-                "पाइथागोरस थ्योरम समझावो",
-                "परीक्षा कद है?",
-                "छात्रवृत्ति री जाणकारी दो"
-            ]
-        }
+        
+        from utils.indian_languages import get_sample_queries
+        sample_queries = get_sample_queries(st.session_state.language)
 
         st.write("**Sample Questions:**")
-        for query in sample_queries.get(st.session_state.language, sample_queries["hi"])[:3]:
-            if st.button(query, key=f"sample_{query[:10]}"):
+        for idx, query in enumerate(sample_queries[:3]):
+            if st.button(query, key=f"sample_{idx}_{st.session_state.language}"):
                 st.session_state.messages.append({"role": "user", "content": query})
                 st.rerun()
 

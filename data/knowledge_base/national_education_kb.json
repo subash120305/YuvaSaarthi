@@ -1,0 +1,340 @@
+{
+  "metadata": {
+    "title": "Comprehensive National Education Knowledge Base - India",
+    "version": "1.0",
+    "academic_years": ["2025-26", "2026-27"],
+    "coverage": ["Classes 8-12", "Engineering", "Medical", "Law", "Commerce", "Arts", "All Degree Programs"],
+    "scope": "All Indian Boards & All States",
+    "last_updated": "December 2025",
+    "next_update": "March 2026",
+    "purpose": "National Education Chatbot - Government Project"
+  },
+
+  "education_boards": {
+    "central_boards": {
+      "cbse": {
+        "name": "Central Board of Secondary Education",
+        "affiliated_schools": 28552,
+        "class_10_exam_dates": "10th March - 20th April 2026",
+        "class_12_exam_dates": "1st May - 20th June 2026",
+        "registration": "October-November 2025",
+        "result_date": "May-June 2026",
+        "website": "https://cbseacademic.nic.in",
+        "model_papers": "https://cbseacademic.nic.in/sample-papers.html"
+      },
+      "icse_isc": {
+        "name": "Council for Indian School Certificate Examination",
+        "affiliated_schools": 3000,
+        "class_10_exam_dates": "February-March 2026",
+        "class_12_exam_dates": "February-March 2026",
+        "website": "https://cisce.org",
+        "specimen_papers": "https://cisce.org/specimen-question-papers"
+      },
+      "ib": {
+        "name": "International Baccalaureate",
+        "programs": ["PYP", "MYP", "Diploma"],
+        "exam_dates": "May-June 2026",
+        "website": "https://www.ibo.org"
+      },
+      "nios": {
+        "name": "National Institute of Open Schooling",
+        "mode": "Distance/Open Learning",
+        "exam_dates": ["April-May 2026", "October-November 2025"],
+        "website": "https://www.nios.ac.in"
+      }
+    }
+  },
+
+  "scholarships": {
+    "national_schemes": {
+      "nmmss": {
+        "name": "National Means-cum-Merit Scholarship Scheme",
+        "amount": "₹12,000 per annum",
+        "eligibility": {
+          "parental_income": "≤ ₹3.5 lakh/year",
+          "marks_required": "55% in Class VII",
+          "school_type": "Government/Government-aided schools"
+        },
+        "portal": "https://scholarships.gov.in",
+        "last_date": "30th September 2025"
+      },
+      "inspire": {
+        "name": "INSPIRE Scholarship",
+        "amount": "₹80,000/year",
+        "eligibility": "Top 1% in Class 12",
+        "portal": "https://inspire.gov.in"
+      },
+      "central_sector": {
+        "name": "Central Sector Scholarship",
+        "amount": "₹10,000-20,000/year",
+        "eligibility": "Top 20% in Class 12",
+        "duration": "3-5 years"
+      },
+      "post_matric_sc": {
+        "name": "Post-Matric SC Scholarship",
+        "monthly_amount": "₹380-1,200/month",
+        "course_fees": "₹2,000-5,000/year"
+      },
+      "post_matric_st": {
+        "name": "Post-Matric ST Scholarship",
+        "monthly_amount": "₹380-1,200/month",
+        "course_fees": "₹2,000-5,000/year"
+      },
+      "post_matric_obc": {
+        "name": "Post-Matric OBC Scholarship",
+        "monthly_amount": "₹300-750/month",
+        "requirement": "OBC-NCL certificate"
+      }
+    },
+
+    "state_scholarships": {
+      "rajasthan": {
+        "cm_higher_education": "₹5,000/year for 60%+ in Class 12",
+        "gargi_puraskar": "₹3,000-5,000 for girls with 75%+",
+        "kalpana_chawla": "₹40,000/year for technical courses",
+        "portal": "https://sje.rajasthan.gov.in"
+      },
+      "maharashtra": {
+        "portal": "https://scholarships.maharashtra.gov.in"
+      },
+      "tamil_nadu": {
+        "portal": "https://www.tnscholarships.gov.in"
+      },
+      "karnataka": {
+        "portal": "https://scholarships.karnataka.gov.in"
+      }
+    },
+
+    "application_process": {
+      "step_1": "Visit https://scholarships.gov.in",
+      "step_2": "One-time registration (OTR)",
+      "step_3": "Fill scheme-specific application",
+      "step_4": "Upload documents (Aadhaar, Income Certificate, etc.)",
+      "step_5": "Submit before state deadline",
+      "step_6": "School principal verification",
+      "step_7": "Direct Benefit Transfer (DBT)"
+    }
+  },
+
+  "reservation_policies": {
+    "central_institutions": {
+      "total_reservation": "59.5%",
+      "sc": "15%",
+      "st": "7.5%",
+      "obc": "27%",
+      "ews": "10%",
+      "pwd_horizontal": "5%"
+    },
+
+    "state_reservations": {
+      "rajasthan": {
+        "total": "49%",
+        "sc": "16%",
+        "st": "12%",
+        "obc": "21%",
+        "ews": "10%"
+      },
+      "uttar_pradesh": {
+        "total": "69%",
+        "sc": "20%",
+        "st": "2%",
+        "obc": "27%"
+      },
+      "maharashtra": {
+        "sc": "13%",
+        "st": "7%",
+        "obc": "19%"
+      },
+      "tamil_nadu": {
+        "sc": "18%",
+        "st": "1%",
+        "obc": "30%"
+      },
+      "karnataka": {
+        "sc": "15%",
+        "st": "3%",
+        "obc": "27%"
+      },
+      "bihar": {
+        "sc": "16%",
+        "st": "1%",
+        "obc": "18%",
+        "ebc": "25%"
+      }
+    },
+
+    "ews_eligibility": {
+      "annual_family_income": "≤ ₹8 lakh",
+      "agricultural_land": "< 5 acres",
+      "residential_plot_municipality": "< 100 sq yards",
+      "category_restriction": "General category only"
+    },
+
+    "age_relaxation": {
+      "sc_st": "5 years extra",
+      "obc": "3 years extra",
+      "pwd": "10 years extra"
+    }
+  },
+
+  "competitive_exams": {
+    "jee_main_2026": {
+      "session_1": "21-30 January 2026",
+      "session_2": "7-16 April 2026",
+      "portal": "https://jeemain.nta.ac.in",
+      "seats": 51000,
+      "eligibility": "Class 12 pass or appearing"
+    },
+
+    "jee_advanced_2026": {
+      "expected_date": "May 2026",
+      "portal": "https://jeeadv.ac.in",
+      "seats": 16000,
+      "eligibility": "Top 2.5 lakh JEE Main scorers"
+    },
+
+    "neet_ug_2026": {
+      "date": "3rd May 2026",
+      "portal": "https://neet.ntaonline.in",
+      "mbbs_seats": 90000,
+      "bds_seats": 300,
+      "mode": "Offline (Pen & Paper)"
+    },
+
+    "neet_pg_2026": {
+      "expected_date": "June 2026",
+      "portal": "https://www.nbe.edu.in",
+      "seats": 25000
+    },
+
+    "cuet_2026": {
+      "expected_dates": "May-June 2026",
+      "portal": "https://cuet.samarth.ac.in",
+      "participating_universities": 500
+    },
+
+    "clat_2026": {
+      "date": "5th May 2026",
+      "portal": "https://consortiumofnlus.ac.in",
+      "nlus": 20,
+      "seats": 4500
+    },
+
+    "gate_2026": {
+      "dates": ["7 February 2026", "8 February 2026", "14 February 2026", "15 February 2026"],
+      "portal": "https://gate.iitg.ac.in",
+      "papers": 30,
+      "registration_end": "6 October 2025"
+    },
+
+    "upsc_cse_2026": {
+      "notification": "14th January 2026",
+      "prelims": "24th May 2026",
+      "mains_start": "21st August 2026",
+      "mains_end": "5th September 2026",
+      "portal": "https://www.upsc.gov.in",
+      "posts": 450
+    },
+
+    "cat_2026": {
+      "expected_date": "29th November 2026",
+      "portal": "https://iimcat.ac.in",
+      "mode": "Online (CBT)",
+      "fee": "₹2,600 (General), ₹1,300 (SC/ST/PwD)"
+    }
+  },
+
+  "government_colleges": {
+    "engineering": {
+      "total_nits": 31,
+      "total_iits": 23,
+      "total_gftis": 19,
+      "total_seats": 51000
+    },
+
+    "medical": {
+      "government_mbbs_colleges": 550,
+      "government_bds_colleges": 300,
+      "ayush_colleges": 400,
+      "total_mbbs_seats": 90000
+    },
+
+    "law": {
+      "nlus": 20,
+      "government_law_colleges": 500,
+      "private_law_colleges": 3000,
+      "total_seats": 4500
+    },
+
+    "state_wise": {
+      "rajasthan": {
+        "engineering_colleges": 8,
+        "medical_colleges": 26,
+        "law_colleges": 3,
+        "websites": {
+          "board": "https://rajeduboard.rajasthan.gov.in",
+          "engineering": "https://reapbtech.com",
+          "scholarship": "https://sje.rajasthan.gov.in"
+        }
+      },
+      "tamil_nadu": {
+        "engineering_colleges": 20,
+        "medical_colleges": 38,
+        "websites": {
+          "board": "https://dge.tn.gov.in"
+        }
+      },
+      "maharashtra": {
+        "engineering_colleges": 30,
+        "medical_colleges": 31,
+        "websites": {
+          "board": "https://mahahsscboard.in"
+        }
+      },
+      "karnataka": {
+        "engineering_colleges": 25,
+        "medical_colleges": 21,
+        "websites": {
+          "board": "https://kseeb.kar.nic.in"
+        }
+      }
+    }
+  },
+
+  "national_portals": {
+    "education_scholarship": {
+      "national_scholarship_portal": "https://scholarships.gov.in",
+      "nta": "https://www.nta.ac.in",
+      "cbse": "https://cbseacademic.nic.in",
+      "cisce": "https://cisce.org",
+      "diksha": "https://diksha.gov.in",
+      "swayam": "https://swayam.gov.in"
+    },
+
+    "admissions_counselling": {
+      "josaa": "https://www.josaa.nic.in",
+      "mcc": "https://mcc.nic.in",
+      "cuet": "https://cuet.samarth.ac.in",
+      "clat": "https://consortiumofnlus.ac.in"
+    }
+  },
+
+  "statistics_2025_26": {
+    "enrollment": {
+      "class_8_12_students": 160000000,
+      "degree_students": 45000000
+    },
+
+    "government_institutions": {
+      "engineering_colleges": 100,
+      "medical_colleges": 550,
+      "law_colleges": 500,
+      "universities": 450
+    },
+
+    "scholarship_allocation": {
+      "total_crores": 5000,
+      "students_benefiting": 3000000
+    }
+  }
+}

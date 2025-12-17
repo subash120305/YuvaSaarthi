@@ -1,8 +1,8 @@
 ```
 # 🎓 YuvaSaarthi
-## AI-Powered Educational Assistant for Government of Rajasthan
+## AI-Powered National Educational Assistant for India
 
-YuvaSaarthi is an intelligent chatbot designed to help students with educational queries, concept explanations, and administrative information for the Department of Technical Education, Government of Rajasthan.
+YuvaSaarthi is an intelligent multilingual chatbot designed to help students across India with educational queries, competitive exam guidance, scholarship information, and concept explanations in all 22 official Indian languages.
 
 ---
 
@@ -15,11 +15,13 @@ YuvaSaarthi is an intelligent chatbot designed to help students with educational
 - Context-aware responses using RAG (Retrieval Augmented Generation)
 
 ### 🌐 **Multilingual Support**
+- **All 22 Official Indian Languages** 🇮🇳
+  - Hindi, Bengali, Telugu, Marathi, Tamil, Gujarati, Kannada, Malayalam, Odia, Punjabi
+  - Assamese, Urdu, Kashmiri, Sindhi, Sanskrit, Nepali, Maithili, Konkani, Manipuri, Dogri, Santali, Bodo
 - **English** 🇬🇧
-- **Hindi** 🇮🇳
-- **Rajasthani** 🏜️
 - Auto-language detection
-- Seamless translation using Bhashini API
+- Seamless translation using Google Translate
+- Regional language support for local accessibility
 
 ### 📺 **YouTube Integration**
 - Recommends relevant educational videos
@@ -30,12 +32,13 @@ YuvaSaarthi is an intelligent chatbot designed to help students with educational
 - **Telegram Bot** - Chat on-the-go
 - **Web Interface** - Clean Streamlit UI
 
-### 📚 **Scalable Knowledge Base**
-- Support for Class 8-12 textbooks
-- Polytechnic course materials
-- Engineering degree content
-- Administrative documents
-- Easy document addition
+### 📚 **Comprehensive Knowledge Base**
+- All Indian education boards (CBSE, ICSE, State boards)
+- Competitive exam guidance (JEE, NEET, CUET, CLAT, UPSC, etc.)
+- National & state scholarships information
+- Government college admissions
+- Reservation policies across all states
+- 150+ verified official portals & links
 
 ---
 
@@ -178,10 +181,11 @@ YuvaSaarthi/
 - Context-aware answers
 - Personality: Mix of formal (admin) and friendly (study help)
 
-### Translation (Bhashini)
-- Government of India's official API
-- Hindi ↔ English
-- Rajasthani support (Hindi-based)
+### Translation (Google Translate)
+- All 22 official Indian languages
+- Auto language detection
+- Free and reliable
+- Regional language support
 
 ### YouTube Integration
 - Educational video recommendations
@@ -200,10 +204,10 @@ BOT_NAME=YuvaSaarthi
 BOT_PERSONALITY=mix          # formal/friendly/mix
 DEFAULT_LANGUAGE=hi          # en/hi/raj
 
-# Department Details
-DEPARTMENT_NAME=Department of Technical Education
-ORGANIZATION=Government of Rajasthan
-WEBSITE=https://dte.rajasthan.gov.in
+# Organization Details
+ORGANIZATION_NAME=YuvaSaarthi - National Education Assistant
+ORGANIZATION=India
+WEBSITE=https://yuvasaarthi.gov.in
 
 # Advanced Settings
 CHUNK_SIZE=1000              # Document chunk size
@@ -357,6 +361,6 @@ If you find this useful, please give it a star! ⭐
 
 ---
 
-**Made with ❤️ for Students of Rajasthan**
+**Made with ❤️ for Students of India 🇮🇳**
 
 ```
