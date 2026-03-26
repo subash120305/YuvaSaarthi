@@ -39,7 +39,10 @@ class LLMHandler:
         query: str,
         context: str = "",
         language: str = "en",
-        conversation_history: Optional[List[dict]] = None
+        conversation_history: Optional[List[dict]] = None,
+        socratic_mode: bool = False,
+        teach_back: bool = False,
+        native_mnemonics: bool = False
     ) -> str:
         """
         Generate response using LLM
@@ -63,6 +66,14 @@ class LLMHandler:
                 personality_prompt=personality,
                 context=context if context else "No specific context available."
             )
+
+            # Feature additions based on args:
+            if socratic_mode:
+                system_prompt += "\n\n[SOCRATIC MODE ACTIVE]: DO NOT give direct answers. Instead, act as a Socratic tutor. Ask a guiding question to help the student discover the answer themselves."
+            if teach_back:
+                system_prompt += "\n\n[TEACH-BACK ACTIVE]: After explaining the concept, ask the student to explain it back to you in their own words to verify their understanding."
+            if native_mnemonics:
+                system_prompt += f"\n\n[NATIVE MNEMONICS ACTIVE]: When generating memory aids or mnemonics, use cultural references from {language} culture (like local food, festivals, movies, cricket) to make it memorable."
 
             # Add language instruction
             language_instructions = {

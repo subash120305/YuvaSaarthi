@@ -1,113 +1,118 @@
-```
-# 🎓 YuvaSaarthi
-## AI-Powered National Educational Assistant for India
+# 🎓 YuvaSaarthi 2.0
+## National Education Platform for India 🇮🇳
 
-YuvaSaarthi is an intelligent multilingual chatbot designed to help students across India with educational queries, competitive exam guidance, scholarship information, and concept explanations in all 22 official Indian languages.
+**"Education for Every Indian, in Every Indian Language"**
+
+YuvaSaarthi is an intelligent multilingual chatbot designed to help students across **all of India** with educational queries, competitive exam guidance, scholarship information, and concept explanations in **all 22 official Indian languages**.
 
 ---
 
-## ✨ Features
+## ✨ Changes in v2.0 (National Edition)
+
+- **🚀 National Scope**: Expanded from Rajasthan-only to covered **36 States & UTs**.
+- **🗣️ 23 Languages**: Support for **all 22 official languages** + English (previously only 3).
+- **📚 Massive Knowledge Base**: Covers all state boards, 50+ competitive exams, and 150+ government portals.
+- **⚡ Enhanced Translation**: Switched to Google Translate for faster, free, and more accurate multilingual support.
+
+---
+
+## 🌟 Key Features
 
 ### 🤖 **AI-Powered Assistance**
-- Answers questions about admissions, courses, exams, and fees
-- Explains difficult concepts in simple terms
-- Provides study guidance and tips
-- Context-aware responses using RAG (Retrieval Augmented Generation)
+- **Education-Focused**: Strictly scoped to answer only education, career, and admission-related queries.
+- **RAG (Retrieval Augmented Generation)**: Answers from verified national knowledge base.
+- **Groq LLM**: Lightning-fast inference using Llama 3.3.
+- **Concept Explanations**: Simplifies complex topics for Class 8-12 students.
 
-### 🌐 **Multilingual Support**
-- **All 22 Official Indian Languages** 🇮🇳
-  - Hindi, Bengali, Telugu, Marathi, Tamil, Gujarati, Kannada, Malayalam, Odia, Punjabi
-  - Assamese, Urdu, Kashmiri, Sindhi, Sanskrit, Nepali, Maithili, Konkani, Manipuri, Dogri, Santali, Bodo
-- **English** 🇬🇧
-- Auto-language detection
-- Seamless translation using Google Translate
-- Regional language support for local accessibility
+### 📱 **Telegram Bot Integration**
+- Full-featured Telegram bot for easy access on mobile.
+- Supports voice/text queries in multiple languages.
+- Delivers YouTube video recommendations directly in chat.
 
-### 📺 **YouTube Integration**
-- Recommends relevant educational videos
-- Searches in preferred language
-- Curated educational content
+### 🌐 **Truly Multilingual (22+ Languages)**
+- English, Hindi, Bengali, Telugu, Marathi, Tamil, Gujarati, Kannada, Malayalam, Odia, Punjabi...
+- Assamese, Urdu, Sanskrit, Nepali, and more!
+- **Auto-detection**: Speak in your mother tongue, get answers in your mother tongue.
 
-### 💬 **Multiple Interfaces**
-- **Telegram Bot** - Chat on-the-go
-- **Web Interface** - Clean Streamlit UI
+### 📚 **Robust Knowledge Base**
+- **Fault-Tolerant Ingestion**: Resume-capable document processing.
+- **Comprehensive Data**:
+  - Competitive exams (JEE, NEET, GATE, CAT, UPSC, SSC).
+  - Scholarships & Financial Aid (National & State).
+  - College Admissions (All India).
 
-### 📚 **Comprehensive Knowledge Base**
-- All Indian education boards (CBSE, ICSE, State boards)
-- Competitive exam guidance (JEE, NEET, CUET, CLAT, UPSC, etc.)
-- National & state scholarships information
-- Government college admissions
-- Reservation policies across all states
-- 150+ verified official portals & links
+---
+
+## 💻 System Requirements
+
+### Hardware
+- **RAM**: Minimum 8GB (16GB recommended for large vector databases).
+- **Storage**: 2GB+ free space.
+- **Internet**: Active connection for LLM and Translation APIs.
+
+### Software
+- **Operating System**: macOS, Linux, or Windows (WSL recommended).
+- **Python**: Version 3.9 or higher.
+- **Node.js**: Version 18 (LTS) or higher.
 
 ---
 
 ## 🚀 Quick Start
 
-### Prerequisites
-
-- **Python 3.9+** ([Download](https://www.python.org/downloads/))
-- **Windows 10/11** (or Mac/Linux with minor modifications)
-- **16GB RAM** recommended
-- **2GB free disk space**
-
 ### Installation
 
-1. **Clone or Download** this project
+1. **Clone the repository**
+   ```bash
+   git clone <repo-url>
+   cd YuvaSaarthi
+   ```
 
 2. **Run Setup Script**
+   This script installs Python/Node dependencies and sets up the environment.
    ```bash
-   setup.bat
+   chmod +x setup.sh
+   ./setup.sh
    ```
 
-3. **Configure API Keys**
-   - Edit `.env` file
-   - Add your API keys (see [API Setup Guide](docs/API_SETUP.md))
+3. **Configure Environment**
+   - Copy `.env.example` to `.env`:
+     ```bash
+     cp .env.example .env
+     ```
+   - Edit `.env` file and add your keys:
+     - `GROQ_API_KEY`: Required.
+     - `TELEGRAM_BOT_TOKEN`: Optional (for Bot).
+     - `YOUTUBE_API_KEY`: Optional (for Videos).
 
-4. **Create Sample Data** (optional)
+4. **Ingest Documents**
+   Process your educational documents into the knowledge base.
    ```bash
-   python create_sample_data.py
+   python3 ingest_documents.py
    ```
+   *Note: Use `python3 ingest_missed.py` to retry failed files if needed.*
 
-5. **Ingest Documents**
+5. **Start the Application**
+
+   **Option A: Web Application**
+   
+   Terminal 1 (Backend):
    ```bash
-   python ingest_documents.py
+   python3 api_server.py
    ```
-
-6. **Start the Bot**
-
-   **Option A: Telegram Bot**
+   
+   Terminal 2 (Frontend):
    ```bash
-   python telegram_bot.py
+   cd frontend
+   npm run dev
    ```
+   Access at [http://localhost:3000](http://localhost:3000)
 
-   **Option B: Web Interface**
+   **Option B: Telegram Bot**
+   
+   Terminal 3:
    ```bash
-   streamlit run streamlit_app.py
+   python3 telegram_bot.py
    ```
-
----
-
-## 📖 Documentation
-
-- **[Installation Guide](docs/INSTALLATION.md)** - Detailed setup instructions
-- **[API Setup Guide](docs/API_SETUP.md)** - How to get API keys
-- **[Usage Guide](docs/USAGE.md)** - How to use the chatbot
-- **[Demo Guide](docs/DEMO_GUIDE.md)** - Tips for presentations
-- **[Architecture](docs/ARCHITECTURE.md)** - System design details
-
----
-
-## 🔑 API Keys Required
-
-| Service | Purpose | Cost | Required? |
-|---------|---------|------|-----------|
-| **Groq** | LLM (AI Brain) | FREE | ✅ Yes |
-| **Bhashini** | Translation | FREE | ⚠️ Optional |
-| **YouTube** | Video Search | FREE | ⚠️ Optional |
-| **Telegram** | Bot Interface | FREE | ⚠️ If using Telegram |
-
-**Note:** Only Groq API is mandatory. Others enhance functionality.
 
 ---
 
@@ -117,250 +122,52 @@ YuvaSaarthi is an intelligent multilingual chatbot designed to help students acr
 YuvaSaarthi/
 ├── backend/
 │   ├── chatbot_engine.py      # Main chatbot logic
-│   ├── document_processor.py  # PDF processing & RAG
-│   ├── llm_handler.py          # Groq LLM integration
-│   ├── translator.py           # Bhashini translation
-│   └── youtube_search.py       # YouTube API
-├── frontend/
-│   ├── telegram_bot.py         # Telegram interface
-│   └── streamlit_app.py        # Web interface
-├── utils/
-│   ├── config.py               # Configuration
-│   └── language_detector.py    # Language detection
+│   ├── document_processor.py  # RAG & PDF processing
+│   ├── llm_handler.py         # Groq LLM integration
+│   ├── google_translator.py   # New Google Translate service
+│   └── youtube_search.py      # YouTube API
+├── frontend/                  # Next.js Web App
+│   ├── app/                   # App Router
+│   ├── components/            # React Components
+│   └── lib/                   # Utilities
 ├── data/
-│   └── documents/              # PDF files go here
-│       ├── textbooks/
-│       ├── polytechnic/
-│       ├── engineering/
-│       └── administrative/
-├── docs/                       # Documentation
-├── requirements.txt            # Dependencies
-├── .env.example                # Environment template
-├── setup.bat                   # Setup script
-└── README.md                   # This file
+│   ├── documents/             # PDFs/Markdown for ingestion
+│   └── vectorstore/           # ChromeDB files
+├── api_server.py              # FastAPI Backend Server
+├── telegram_bot.py            # Telegram Bot Interface
+├── ingest_documents.py        # Main ingestion script
+├── ingest_missed.py           # Recovery script for missed files
+├── MAJOR_UPDATE.md            # Details of v2.0 changes
+├── setup.sh                   # Setup script
+└── requirements.txt           # Python dependencies
 ```
-
----
-
-## 💡 Usage Examples
-
-### Adding Your Textbooks
-
-1. Place PDF files in `data/documents/textbooks/`
-2. Name them: `class_10_mathematics.pdf`, `class_11_physics.pdf`, etc.
-3. Run: `python ingest_documents.py`
-4. Done! The chatbot can now answer from your books
-
-### Sample Questions
-
-**English:**
-- "What are the admission requirements for polytechnic?"
-- "Explain Pythagoras theorem in simple terms"
-- "When are the semester exams?"
-
-**Hindi:**
-- "पॉलिटेक्निक में प्रवेश की आवश्यकताएं क्या हैं?"
-- "पाइथागोरस प्रमेय को सरल शब्दों में समझाओ"
-- "सेमेस्टर की परीक्षाएं कब हैं?"
-
-**Rajasthani:**
-- "दाखिलो री जरूरत कांई है?"
-- "परीक्षा कद होसी?"
-
----
-
-## 🎯 Key Components
-
-### RAG System
-- Retrieves relevant context from your documents
-- Uses semantic search with embeddings
-- Supports multilingual documents
-
-### LLM (Groq)
-- Lightning-fast responses
-- Context-aware answers
-- Personality: Mix of formal (admin) and friendly (study help)
-
-### Translation (Google Translate)
-- All 22 official Indian languages
-- Auto language detection
-- Free and reliable
-- Regional language support
-
-### YouTube Integration
-- Educational video recommendations
-- Language-specific searches
-- Safe search enabled
 
 ---
 
 ## 🔧 Configuration
 
-Edit `.env` file to customize:
+Customize behavior in `.env`:
 
 ```env
+# API Keys
+GROQ_API_KEY=your_key_here
+TELEGRAM_BOT_TOKEN=your_token_here
+
 # Bot Settings
-BOT_NAME=YuvaSaarthi
 BOT_PERSONALITY=mix          # formal/friendly/mix
-DEFAULT_LANGUAGE=hi          # en/hi/raj
+DEFAULT_LANGUAGE=hi
 
-# Organization Details
-ORGANIZATION_NAME=YuvaSaarthi - National Education Assistant
-ORGANIZATION=India
-WEBSITE=https://yuvasaarthi.gov.in
-
-# Advanced Settings
-CHUNK_SIZE=1000              # Document chunk size
-TOP_K_RESULTS=4              # Number of context docs
-TEMPERATURE=0.7              # LLM creativity (0-1)
+# RAG Settings
+CHUNK_SIZE=1000
+TOP_K_RESULTS=4
 ```
 
 ---
 
-## 🧪 Testing
+## 🛡️ License
 
-Test individual components:
-
-```bash
-# Test RAG system
-python -m backend.document_processor
-
-# Test LLM
-python -m backend.llm_handler
-
-# Test translation
-python -m backend.translator
-
-# Test YouTube search
-python -m backend.youtube_search
-
-# Test full chatbot
-python -m backend.chatbot_engine
-```
-
----
-
-## 🐛 Troubleshooting
-
-### "Groq API key not configured"
-- Edit `.env` file
-- Add your Groq API key from [console.groq.com](https://console.groq.com)
-
-### "Vector store not found"
-- Run: `python ingest_documents.py`
-- Make sure you have PDF files in `data/documents/`
-
-### "No PDF files found"
-- Run: `python create_sample_data.py` for demo data
-- OR add your own PDFs to `data/documents/textbooks/`
-
-### "Module not found" errors
-- Activate virtual environment: `venv\Scripts\activate`
-- Reinstall dependencies: `pip install -r requirements.txt`
-
----
-
-## 📊 System Requirements
-
-### Minimum:
-- 8GB RAM
-- 2GB free disk space
-- Internet connection (for APIs)
-- Python 3.9+
-
-### Recommended:
-- 16GB RAM
-- 5GB free disk space (for larger document collections)
-- Stable internet connection
-
----
-
-## 🤝 Contributing
-
-This is a college project, but suggestions are welcome!
-
-1. Test the chatbot
-2. Add more sample documents
-3. Improve translations
-4. Enhance UI/UX
-5. Report bugs
-
----
-
-## 📜 License
-
-MIT License - Free to use for educational purposes
-
----
-
-## 👥 Credits
-
-**Developed by:** [Your Name]
-**For:** Department of Technical Education, Government of Rajasthan
-**Academic Year:** 2024-25
-**Institution:** [Your College Name]
-
-**Technologies Used:**
-- LangChain - RAG framework
-- Groq - Fast LLM inference
-- Bhashini - Government translation API
-- Streamlit - Web interface
-- Python Telegram Bot - Telegram integration
-- ChromaDB - Vector database
-- Sentence Transformers - Embeddings
-
----
-
-## 📞 Support
-
-For issues or questions:
-1. Check [Troubleshooting Guide](docs/TROUBLESHOOTING.md)
-2. Review [FAQ](docs/FAQ.md)
-3. Create an issue on GitHub
-
----
-
-## 🎓 For Professors/Evaluators
-
-### Project Highlights:
-- ✅ Real-world application for government department
-- ✅ Multilingual support (3 languages)
-- ✅ Modern AI/ML technologies (RAG, LLM, Embeddings)
-- ✅ Scalable architecture
-- ✅ Multiple user interfaces
-- ✅ Complete documentation
-- ✅ Easy to demo and extend
-
-### Demo Tips:
-1. Show multilingual capabilities (switch languages mid-conversation)
-2. Demonstrate concept explanation with YouTube videos
-3. Show document Q&A (answer from uploaded PDFs)
-4. Highlight Rajasthani language support (unique!)
-5. Explain RAG system and how it works
-
-See [Demo Guide](docs/DEMO_GUIDE.md) for detailed presentation tips.
-
----
-
-## 🚀 Future Enhancements
-
-- [ ] Voice input/output
-- [ ] Mobile app (React Native)
-- [ ] WhatsApp integration
-- [ ] Advanced analytics dashboard
-- [ ] Student progress tracking
-- [ ] Practice problem generation
-- [ ] Exam preparation mode
-- [ ] Integration with college ERP systems
-
----
-
-## ⭐ Star This Project
-
-If you find this useful, please give it a star! ⭐
+MIT License - Free to use for educational purposes.
 
 ---
 
 **Made with ❤️ for Students of India 🇮🇳**
-
-```

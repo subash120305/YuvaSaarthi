@@ -3,6 +3,7 @@ YuvaSaarthi - Main Chatbot Engine
 Integrates RAG, LLM, Translation, and YouTube Search
 """
 
+import re
 from typing import Dict, List, Optional, Tuple
 from loguru import logger
 
@@ -12,8 +13,14 @@ sys.path.append(str(Path(__file__).parent.parent))
 
 from backend.document_processor import DocumentProcessor
 from backend.llm_handler import LLMHandler
-from backend.google_translator import TranslationManager  # Changed to Google Translator
+from backend.google_translator import TranslationManager
 from backend.youtube_search import YouTubeSearcher
+from backend.syllabus_tracker import tracker as syllabus_tracker
+from backend.vision_handler import vision_handler
+from backend.teacher_assistant import teacher_assistant
+from backend.spaced_repetition import spaced_repetition
+from backend.exam_intelligence import exam_intelligence
+from backend.schemes_client import schemes_client
 from utils.language_detector import LanguageDetector
 from utils.config import settings
 
@@ -46,25 +53,100 @@ class ChatbotEngine:
         query: str,
         user_id: str,
         language: Optional[str] = None,
-        include_videos: bool = True
+        include_videos: bool = True,
+        socratic_mode: bool = False,
+        teach_back: bool = False,
+        native_mnemonics: bool = False,
+        image_path: Optional[str] = None
     ) -> Dict[str, any]:
         """
         Process user query and generate response
-
-        Args:
-            query: User's question
-            user_id: Unique user identifier
-            language: Preferred language (en, hi, raj) or None for auto-detect
-            include_videos: Whether to include YouTube video recommendations
-
-        Returns:
-            Dict with response, videos, language info
         """
         try:
             # Detect language if not specified
             if not language or language == "auto":
                 language = self.language_detector.detect(query)
                 logger.info(f"Detected language: {language}")
+
+            if image_path:
+                logger.info("Processing image input.")
+                vision_resp = vision_handler.explain_image(image_path, query, language)
+                self._update_history(user_id, "[Image Upload] " + query, vision_resp)
+                return {
+                    "response": vision_resp,
+                    "videos": [],
+                    "language": language,
+                    "context_used": False,
+                    "video_count": 0
+                }
+
+            # Feature 2: Distress Detection
+            distress_keywords = ["want to die", "no point", "give up", "can't take it", "suicide", "end my life", "i want to die", "kill myself", "feeling hopeless", "depressed"]
+            if any(k in query.lower() for k in distress_keywords):
+                logger.info("Distress detected in query.")
+                empathetic_response = "I can hear that you're going through a really tough time right now. Exam results or academic pressure don't define your worth or your future. If you're feeling overwhelmed, please reach out to someone who can help immediately:\n- **iCall**: 9152987821\n- **Vandrevala Foundation**: 1860-2662-345 (24/7)\n- **AASRA**: 9820466726\nWould you like to talk about what options are available to you?"
+                try:
+                    if language and language != "en":
+                        empathetic_response = self.translator.translate(empathetic_response, "en", language)
+                except Exception as e:
+                    logger.warning(f"Failed to translate distress response: {e}")
+                
+                self._update_history(user_id, query, empathetic_response)
+                return {
+                    "response": empathetic_response,
+                    "videos": [],
+                    "language": language,
+                    "context_used": False,
+                    "video_count": 0
+                }
+
+            # Intercept intense queries
+            q_lower = query.lower()
+            if "lesson plan" in q_lower or "teacher mode" in q_lower:
+                topic = query.replace("lesson plan", "").replace("for", "").strip() or "General Topic"
+                resp = teacher_assistant.generate_lesson_plan(topic, language=language)
+                self._update_history(user_id, query, resp)
+                return {"response": resp, "videos": [], "language": language, "context_used": False, "video_count": 0}
+
+            if "exam pattern" in q_lower or "strategy" in q_lower or "weightage" in q_lower:
+                resp = exam_intelligence.provide_strategy(query)
+                self._update_history(user_id, query, resp)
+                return {"response": resp, "videos": [], "language": language, "context_used": False, "video_count": 0}
+
+            if "scholarship" in q_lower or "scheme" in q_lower or "eligibility" in q_lower:
+                resp = schemes_client.search_schemes(query)
+                self._update_history(user_id, query, resp)
+                return {"response": resp, "videos": [], "language": language, "context_used": False, "video_count": 0}
+
+            # Get conversation history for context
+            history = self.conversations.get(user_id, [])
+
+            # Handle Option Selection (1, 2, 3)
+            # If user sends a single digit, look up the option in the previous bot message
+            if query.strip() in ["1", "2", "3"] and history:
+                try:
+                    last_bot_msg = history[-1]["content"] # Last message should be from Assistant
+                    option_num = query.strip()
+                    # Regex to find "1. Some text"
+                    # Matches "1. Text..." until newline
+                    match = re.search(rf"{option_num}\.\s*(.*?)(?:\n|$)", last_bot_msg)
+                    if match:
+                        extracted_option = match.group(1).strip()
+                        logger.info(f"User selected Option {option_num}. Rewriting query to: '{extracted_option}'")
+                        query = extracted_option
+                        # Update language detection for the NEW query if needed (usually stays same)
+                except Exception as e:
+                    logger.warning(f"Failed to extract option context: {e}")
+
+            # Handle Short Contextual Queries (e.g., "Strategy", "Syllabus", "Why")
+            # If query is very short (< 3 words), append context from previous interaction
+            if len(query.split()) <= 2 and len(history) >= 2:
+                last_user_query = history[-2]["content"]
+                # Avoid chaining if it's already long or disjoint
+                if len(last_user_query.split()) < 20: 
+                    logger.info(f"Short query detected. Appending context from: {last_user_query}")
+                    query = f"{last_user_query} {query}"
+                    logger.info(f"Contextualized query: {query}")
 
             # Translate query to English for RAG (if needed)
             query_for_rag = query
@@ -83,13 +165,35 @@ class ChatbotEngine:
                 query=query,
                 context=context,
                 language=language,
-                conversation_history=history
+                conversation_history=history,
+                socratic_mode=socratic_mode,
+                teach_back=teach_back,
+                native_mnemonics=native_mnemonics
             )
+
+            # Feature 3 Gap Tracker & Feature 12 NEP Mapping
+            classified_chapter = syllabus_tracker.classify_and_store(user_id, query)
+            if classified_chapter and classified_chapter != "None":
+                spaced_repetition.add_topic(user_id, classified_chapter) # Feature 8
+                import json
+                try:
+                    with open("data/nep_mapping.json") as f:
+                        nep_data = json.load(f)
+                    if classified_chapter in nep_data:
+                        n = nep_data[classified_chapter]
+                        response += f"\n\n*NEP 2020: This topic aligns with {n['stage']}, Competency: {n['competency']}*"
+                except Exception as e:
+                    logger.warning(f"NEP tagging error: {e}")
 
             # Translate response back to user's language if needed
             if language != "en":
                 response = self.translator.translate(response, "en", language)
                 logger.debug(f"Translated response to {language}")
+
+            # Feature 3 syllabus progress
+            if "progress" in q_lower or "coverage" in q_lower:
+                prog = syllabus_tracker.get_progress(user_id)
+                response += f"\n\n**Syllabus Progress Tracker:**\nCoverage: {prog['percentage']}% ({prog['covered']}/{prog['total']} topics)"
 
             # Update conversation history
             self._update_history(user_id, query, response)
@@ -97,11 +201,43 @@ class ChatbotEngine:
             # Check if this is a concept explanation query
             is_study_query = self._is_study_query(query)
 
-            # Search for YouTube videos if appropriate
+            # Check for explicit video request
+            explicit_video_request = "video" in query.lower() or query.strip() == "4"
+
+            # Determine video search topic
+            # Determine video search topic
+            video_search_query = query
+            if query.strip() == "4" and len(history) >= 2:
+                # If user selects "4" (Video Option), context is in their PREVIOUS message
+                # History structure: [User, Bot, User(current), Bot(current-being-built)]? 
+                # No, history passed to this func is UP TO current.
+                # Actually, 'history' passed here excludes current.
+                # So if user sent "4", '4' is current query.
+                # History[-1] is Bot Response. History[-2] is User's previous query.
+                
+                last_user_query = history[-2]["content"] if len(history) >= 2 else ""
+                
+                # Use the previous user query as the topic (e.g., "When is GATE 2026")
+                # Clean it a bit
+                clean_topic = last_user_query.lower().replace("explain", "").replace("tell me about", "").strip()
+                if clean_topic:
+                    video_search_query = clean_topic
+                    logger.info(f"Extracted video topic from previous user query: {video_search_query}")
+                else:
+                    # Fallback to current query if extraction fails
+                    pass
+
+            # Search for YouTube videos ONLY if explicitly requested
             videos = []
-            if include_videos and is_study_query and self.youtube.is_configured:
-                videos = self.youtube.search_videos(query, language=language, max_results=3)
-                logger.info(f"Found {len(videos)} YouTube videos")
+            if include_videos and self.youtube.is_configured:
+                if explicit_video_request:
+                    videos = self.youtube.search_videos(video_search_query, language=language, max_results=3)
+                    logger.info(f"Found {len(videos)} YouTube videos for topic: {video_search_query}")
+
+            # Append videos to response text so they appear in all interfaces (Frontend/Telegram)
+            if videos:
+                video_text = self.youtube.format_videos_for_display(videos, language)
+                response += f"\n\n{video_text}"
 
             return {
                 "response": response,

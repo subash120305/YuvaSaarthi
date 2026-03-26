@@ -75,3 +75,14 @@ test_output.txt
 
 # OS specific
 Thumbs.db
+.DS_Store
+
+# Frontend
+frontend/.next/
+frontend/node_modules/
+
+# Local databases
+backend/db/*.db
+
+# Initial Raw Large Resources
+data/documents/

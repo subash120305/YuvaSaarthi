@@ -38,14 +38,24 @@ export function Navbar({ currentLanguage, onLanguageChange, onClearChat }: Navba
       <div className="flex h-full items-center justify-between px-4 md:px-6">
         {/* Logo */}
         <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-secondary">
-            <GraduationCap className="h-6 w-6 text-primary-foreground" strokeWidth={2} />
-          </div>
+          {/* Custom Logo - Gradient Mask */}
+          <div
+            className="h-12 w-16 bg-gradient-to-br from-primary to-secondary"
+            style={{
+              maskImage: "url('/logo-icon.png')",
+              maskSize: "contain",
+              maskRepeat: "no-repeat",
+              maskPosition: "center",
+              WebkitMaskImage: "url('/logo-icon.png')",
+              WebkitMaskSize: "contain",
+              WebkitMaskRepeat: "no-repeat",
+              WebkitMaskPosition: "center"
+            }}
+          />
           <div>
             <h1 className="text-lg font-semibold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
               YuvaSaarthi
             </h1>
-            <p className="text-xs text-muted-foreground">National Education Assistant</p>
           </div>
         </div>
 
@@ -84,7 +94,7 @@ export function Navbar({ currentLanguage, onLanguageChange, onClearChat }: Navba
                 <MoreVertical className="h-5 w-5" strokeWidth={2} />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-56 glass">
+            <DropdownMenuContent align="end" className="w-56 bg-popover border border-border shadow-lg md:glass md:bg-transparent md:border-white/10">
               <DropdownMenuLabel>Options</DropdownMenuLabel>
               <DropdownMenuSeparator />
 

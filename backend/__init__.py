@@ -5,7 +5,7 @@ YuvaSaarthi - Backend Package
 from .chatbot_engine import ChatbotEngine, get_chatbot
 from .document_processor import DocumentProcessor
 from .llm_handler import LLMHandler
-from .translator import TranslationManager
+from .google_translator import TranslationManager
 from .youtube_search import YouTubeSearcher
 
 __all__ = [

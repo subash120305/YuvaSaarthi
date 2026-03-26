@@ -10,11 +10,11 @@ from typing import List, Dict, Optional
 from loguru import logger
 
 # Fixed imports for LangChain 1.0+
-from langchain_community.document_loaders import PyPDFLoader, TextLoader
-from langchain_text_splitters import RecursiveCharacterTextSplitter
+from langchain_community.document_loaders import PyPDFLoader, TextLoader, UnstructuredMarkdownLoader, PDFMinerLoader
+from langchain_text_splitters import RecursiveCharacterTextSplitter, MarkdownHeaderTextSplitter
 from langchain_core.documents import Document
 from langchain_community.embeddings import HuggingFaceEmbeddings
-from langchain_community.vectorstores import Chroma
+from langchain_chroma import Chroma
 
 import sys
 sys.path.append(str(Path(__file__).parent.parent))
@@ -45,6 +45,175 @@ class DocumentProcessor:
         )
 
         self.vector_store: Optional[Chroma] = None
+
+    def get_processed_sources(self) -> set:
+        """Get set of source filenames already in the database"""
+        if not self.vector_store:
+            self.vector_store = self.load_vector_store()
+        
+        if not self.vector_store:
+            return set()
+            
+        try:
+            # Fetch only metadata to be lightweight
+            result = self.vector_store.get(include=['metadatas'])
+            sources = set()
+            for meta in result['metadatas']:
+                if meta and 'source' in meta:
+                    sources.add(meta['source'])
+            return sources
+        except Exception as e:
+            logger.warning(f"Could not fetch existing sources: {e}")
+            return set()
+
+    def process_and_add_single_file(self, file_path: Path) -> bool:
+        """Process and add a single file to vector store"""
+        try:
+            # 1. Load
+            # 1. Load
+            documents = []
+            if file_path.suffix.lower() == '.pdf':
+                try:
+                    loader = PyPDFLoader(str(file_path))
+                    documents = loader.load()
+                except Exception as e:
+                    logger.warning(f"PyPDFLoader failed for {file_path.name}: {e}. Retrying with PDFMinerLoader...")
+                    try:
+                        loader = PDFMinerLoader(str(file_path))
+                        documents = loader.load()
+                    except Exception as e2:
+                        logger.error(f"Fallback loader failed for {file_path.name}: {e2}")
+                        return False
+
+            elif file_path.suffix.lower() == '.md':
+                try:
+                    # Robust Semantic Markdown Splitting
+                    with open(file_path, 'r', encoding='utf-8') as f:
+                        text_content = f.read()
+                    
+                    headers_to_split_on = [
+                        ("#", "Header 1"),
+                        ("##", "Header 2"),
+                        ("###", "Header 3"),
+                        ("####", "Header 4"),
+                    ]
+                    
+                    markdown_splitter = MarkdownHeaderTextSplitter(headers_to_split_on=headers_to_split_on)
+                    # This creates documents with headers in metadata
+                    md_header_splits = markdown_splitter.split_text(text_content)
+                    
+                    # Store headers in content to ensure visibility if metadata isn't fully used
+                    for doc in md_header_splits:
+                        # Prepend headers to content for better context in RAG
+                        header_context = ""
+                        for key, val in doc.metadata.items():
+                            if key.startswith("Header"):
+                                header_context += f"{val} > "
+                        
+                        if header_context:
+                           doc.page_content = f"Context: {header_context.strip(' > ')}\n{doc.page_content}"
+
+                    documents = md_header_splits
+                except Exception as e:
+                    logger.warning(f"Markdown splitting failed for {file_path.name}: {e}. Falling back to TextLoader.")
+                    loader = TextLoader(str(file_path), encoding='utf-8')
+                    documents = loader.load()
+
+            elif file_path.suffix.lower() == '.txt':
+                loader = TextLoader(str(file_path), encoding='utf-8')
+                documents = loader.load()
+            
+            if not documents:
+                return False
+
+            # 2. Metadata
+            file_metadata = self.extract_metadata_from_filename(file_path.stem)
+            category = self.get_category_from_path(file_path)
+            for doc in documents:
+                doc.metadata.update({
+                    'source': file_path.name,
+                    'file_type': file_path.suffix[1:],
+                    'category': category,
+                    **file_metadata
+                })
+
+            # 3. Split
+            chunks = self.process_documents(documents)
+
+            # 4. Add to DB
+            if not self.vector_store:
+                # Initialize if first file
+                VECTOR_DB_DIR.mkdir(parents=True, exist_ok=True)
+                self.vector_store = Chroma.from_documents(
+                    documents=chunks,
+                    embedding=self.embeddings,
+                    persist_directory=self.vector_db_path
+                )
+            else:
+                self.vector_store.add_documents(chunks)
+                
+            return True
+
+        except Exception as e:
+            logger.error(f"Failed to process {file_path.name}: {e}")
+            return False
+
+    def ingest_documents(self, force_refresh: bool = False) -> Chroma:
+        """
+        Main ingestion pipeline - Incremental Mode
+        """
+        logger.info("Starting Incremental Ingestion Pipeline...")
+        
+        # Initialize Store
+        if not force_refresh:
+            self.vector_store = self.load_vector_store()
+        else:
+            import shutil
+            if VECTOR_DB_DIR.exists():
+                shutil.rmtree(VECTOR_DB_DIR)
+            self.vector_store = None
+
+        processed_sources = self.get_processed_sources()
+        logger.info(f"Found {len(processed_sources)} existing documents in DB.")
+
+        # Find all files
+        all_files = []
+        for ext in ["*.pdf", "*.md", "*.txt"]:
+            all_files.extend(self.documents_dir.rglob(ext))
+
+        total_files = len(all_files)
+        logger.info(f"Found {total_files} files on disk.")
+
+        processed_count = 0
+        skipped_count = 0
+        error_count = 0
+
+        for i, file_path in enumerate(all_files, 1):
+            if file_path.name in processed_sources and not force_refresh:
+                logger.debug(f"Skipping {file_path.name} (Already processed)")
+                skipped_count += 1
+                continue
+
+            logger.info(f"[{i}/{total_files}] Processing: {file_path.name}")
+            
+            success = self.process_and_add_single_file(file_path)
+            
+            if success:
+                processed_count += 1
+                logger.info(f"✓ Successfully added {file_path.name}")
+            else:
+                error_count += 1
+                logger.error(f"✗ Failed to add {file_path.name}")
+
+        logger.info("="*50)
+        logger.info("Ingestion Complete")
+        logger.info(f"Processed: {processed_count}")
+        logger.info(f"Skipped: {skipped_count}")
+        logger.info(f"Errors: {error_count}")
+        logger.info("="*50)
+        
+        return self.vector_store
+
 
     def extract_metadata_from_filename(self, filename: str) -> Dict[str, str]:
         """
@@ -196,11 +365,11 @@ class DocumentProcessor:
 
     def create_vector_store(self, documents: List[Document]) -> Chroma:
         """
-        Create vector store from documents
-
+        Create vector store from documents using batch processing
+        
         Args:
             documents: List of document chunks
-
+            
         Returns:
             Chroma vector store
         """
@@ -208,13 +377,33 @@ class DocumentProcessor:
 
         # Create directory if it doesn't exist
         VECTOR_DB_DIR.mkdir(parents=True, exist_ok=True)
-
-        # Create vector store
+        
+        # Initialize empty (or with first batch)
+        # Using batch size of 5000 to manage memory usage
+        batch_size = 5000
+        total_docs = len(documents)
+        total_batches = (total_docs + batch_size - 1) // batch_size
+        
+        logger.info(f"Processing {total_docs} chunks in {total_batches} batches...")
+        
+        # Process first batch to initialize the store
+        first_batch = documents[:batch_size]
+        logger.info(f"Processing batch 1/{total_batches}")
+        
         vector_store = Chroma.from_documents(
-            documents=documents,
+            documents=first_batch,
             embedding=self.embeddings,
             persist_directory=self.vector_db_path
         )
+        
+        # Process remaining batches
+        for i in range(1, total_batches):
+            start_idx = i * batch_size
+            end_idx = min(start_idx + batch_size, total_docs)
+            batch = documents[start_idx:end_idx]
+            
+            logger.info(f"Processing batch {i+1}/{total_batches}")
+            vector_store.add_documents(batch)
 
         logger.info(f"Vector store created with {len(documents)} documents")
         return vector_store
@@ -242,38 +431,7 @@ class DocumentProcessor:
             logger.error(f"Error loading vector store: {e}")
             return None
 
-    def ingest_documents(self, force_refresh: bool = False) -> Chroma:
-        """
-        Main ingestion pipeline
 
-        Args:
-            force_refresh: If True, recreate vector store even if exists
-
-        Returns:
-            Chroma vector store
-        """
-        # Try to load existing vector store
-        if not force_refresh:
-            self.vector_store = self.load_vector_store()
-            if self.vector_store:
-                return self.vector_store
-
-        # Load and process documents
-        logger.info("Starting document ingestion pipeline...")
-        documents = self.load_documents()
-
-        if not documents:
-            logger.warning("No documents found to ingest!")
-            return None
-
-        # Process documents
-        chunks = self.process_documents(documents)
-
-        # Create vector store
-        self.vector_store = self.create_vector_store(chunks)
-
-        logger.info("Document ingestion completed successfully!")
-        return self.vector_store
 
     def add_documents(self, file_paths: List[str]) -> bool:
         """

@@ -94,16 +94,15 @@ def main():
 
         print("-" * 70)
         
-        # Ask for confirmation
-        response = input("\n▶️  Proceed with ingestion? (yes/no): ").strip().lower()
-        if response not in ['yes', 'y']:
-            print("\n❌ Ingestion cancelled by user\n")
-            return 0
-
+        # Auto-confirm for system usage
+        print("\n▶️  Proceeding with ingestion automatically...")
+        response = 'yes'
+        
         force_refresh = False
         if vector_store_exists:
-            response = input("▶️  Recreate vector store from scratch? (yes/no): ").strip().lower()
-            force_refresh = response in ['yes', 'y']
+            print("▶️  Found existing vector store. Running in incremental mode...")
+            force_refresh = False
+
 
         print("\n" + "=" * 70)
         print("🚀 Starting document ingestion...")
@@ -131,13 +130,12 @@ def main():
             print(f"   • Status: ✅ Ready for use")
 
             print("\n🚀 Next Steps:")
-            print("   Run one of the following commands:\n")
-            print("   1️⃣  Web Interface:")
-            print("       streamlit run streamlit_app.py\n")
-            print("   2️⃣  Telegram Bot:")
-            print("       python telegram_bot.py\n")
-            print("   3️⃣  Test the system:")
-            print("       python -m backend.chatbot_engine\n")
+            print("   1️⃣  Start the Backend Server:")
+            print("       python3 api_server.py\n")
+            print("   2️⃣  Start the Frontend (in new terminal):")
+            print("       cd frontend && npm run dev\n")
+            print("   3️⃣  Open App:")
+            print("       http://localhost:3000\n")
 
         else:
             print("\n" + "=" * 70)

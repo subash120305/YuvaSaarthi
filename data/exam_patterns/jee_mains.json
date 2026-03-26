@@ -1,0 +1,20 @@
+{
+    "exam": "JEE Mains",
+    "Physics": {
+        "High Weightage + Easy": [
+            "Current Electricity",
+            "Electrostatics",
+            "Oscillations and Waves",
+            "Communication Systems"
+        ],
+        "High Weightage + Hard": [
+            "Rotational Motion",
+            "Laws of Motion",
+            "Electromagnetic Waves"
+        ],
+        "Low Weightage": [
+            "Properties of Solids and Liquids",
+            "Kinematics"
+        ]
+    }
+}

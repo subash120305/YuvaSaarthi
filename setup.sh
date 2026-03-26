@@ -19,7 +19,6 @@ echo ""
 # Step 1: Install Python dependencies
 echo "📦 Installing Python dependencies..."
 pip3 install -r requirements.txt
-pip3 install googletrans==4.0.0-rc1 fastapi uvicorn python-multipart
 
 echo ""
 echo "✅ Python dependencies installed"

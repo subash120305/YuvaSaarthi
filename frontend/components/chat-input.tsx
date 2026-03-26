@@ -8,11 +8,13 @@ import { cn } from "@/lib/utils"
 interface ChatInputProps {
   onSend: (message: string) => void
   disabled?: boolean
+  history?: string[]
 }
 
-export function ChatInput({ onSend, disabled }: ChatInputProps) {
+export function ChatInput({ onSend, disabled, history = [] }: ChatInputProps) {
   const [message, setMessage] = useState("")
   const [isRecording, setIsRecording] = useState(false)
+  const [historyIndex, setHistoryIndex] = useState(-1)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
 
   useEffect(() => {
@@ -26,6 +28,7 @@ export function ChatInput({ onSend, disabled }: ChatInputProps) {
     if (message.trim() && !disabled) {
       onSend(message.trim())
       setMessage("")
+      setHistoryIndex(-1)
     }
   }
 
@@ -33,6 +36,45 @@ export function ChatInput({ onSend, disabled }: ChatInputProps) {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault()
       handleSend()
+      return
+    }
+
+    // Up Arrow - Navigate History Backwards
+    if (e.key === "ArrowUp") {
+      if (!history.length) return
+
+      // Only navigate if cursor is at start or stored index is active
+      if (textareaRef.current && textareaRef.current.selectionStart === 0) {
+        e.preventDefault()
+        const lastIdx = history.length - 1
+        let newIdx = historyIndex
+
+        if (historyIndex === -1) {
+          newIdx = lastIdx
+        } else {
+          newIdx = Math.max(0, historyIndex - 1)
+        }
+
+        setHistoryIndex(newIdx)
+        setMessage(history[newIdx])
+      }
+    }
+
+    // Down Arrow - Navigate History Forwards
+    if (e.key === "ArrowDown") {
+      if (historyIndex === -1) return
+
+      e.preventDefault()
+      const lastIdx = history.length - 1
+
+      if (historyIndex === lastIdx) {
+        setHistoryIndex(-1)
+        setMessage("")
+      } else {
+        const newIdx = Math.min(lastIdx, historyIndex + 1)
+        setHistoryIndex(newIdx)
+        setMessage(history[newIdx])
+      }
     }
   }
 
@@ -47,10 +89,10 @@ export function ChatInput({ onSend, disabled }: ChatInputProps) {
     <div className="border-t border-border/50 p-4 glass">
       <div className="mx-auto max-w-3xl">
         <div className="flex items-end gap-2 rounded-2xl border border-border/50 bg-card/50 p-2 transition-colors focus-within:border-primary/50">
-          {/* Attach Button */}
-          <Button variant="ghost" size="icon" className="h-9 w-9 shrink-0 rounded-full" aria-label="Attach file">
+          {/* Attach Button (Disabled temporarily) */}
+          {/* <Button variant="ghost" size="icon" className="h-9 w-9 shrink-0 rounded-full" aria-label="Attach file">
             <Paperclip className="h-5 w-5" strokeWidth={2} />
-          </Button>
+          </Button> */}
 
           {/* Text Input */}
           <textarea
@@ -64,8 +106,8 @@ export function ChatInput({ onSend, disabled }: ChatInputProps) {
             className="max-h-[200px] min-h-[40px] flex-1 resize-none bg-transparent py-2 text-sm outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50"
           />
 
-          {/* Voice Button */}
-          <Button
+          {/* Voice Button (Disabled temporarily) */}
+          {/* <Button
             variant="ghost"
             size="icon"
             className={cn(
@@ -76,7 +118,7 @@ export function ChatInput({ onSend, disabled }: ChatInputProps) {
             aria-label={isRecording ? "Stop recording" : "Start voice input"}
           >
             <Mic className="h-5 w-5" strokeWidth={2} />
-          </Button>
+          </Button> */}
 
           {/* Send Button */}
           <Button

@@ -44,6 +44,9 @@ class ChatRequest(BaseModel):
     language: str = "en"
     conversation_id: str = "default"
     include_videos: bool = True
+    socratic_mode: bool = False
+    teach_back: bool = False
+    native_mnemonics: bool = False
 
 
 class ChatResponse(BaseModel):
@@ -128,7 +131,10 @@ async def chat(request: ChatRequest):
             query=request.message,
             user_id=request.conversation_id,
             language=request.language,
-            include_videos=request.include_videos
+            include_videos=request.include_videos,
+            socratic_mode=request.socratic_mode,
+            teach_back=request.teach_back,
+            native_mnemonics=request.native_mnemonics
         )
         
         return ChatResponse(

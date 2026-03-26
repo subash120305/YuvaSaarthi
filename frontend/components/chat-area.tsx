@@ -54,7 +54,8 @@ export function ChatArea({ messages, isTyping, onSelectPrompt }: ChatAreaProps) 
       <div
         ref={scrollContainerRef}
         onScroll={handleScroll}
-        className="h-full overflow-y-auto scrollbar-thin scrollbar-thumb-border scrollbar-track-transparent"
+        className="h-full overflow-y-auto scrollbar-thin scrollbar-thumb-border scrollbar-track-transparent overscroll-y-contain pb-4"
+        style={{ WebkitOverflowScrolling: "touch" }}
       >
         <div className="mx-auto max-w-3xl px-4 py-6">
           {showWelcome ? (

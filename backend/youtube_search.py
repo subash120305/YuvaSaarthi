@@ -64,9 +64,10 @@ class YouTubeSearcher:
             search_params = {
                 'q': educational_query,
                 'part': 'snippet',
-                'maxResults': max_results,
+                'maxResults': 10,  # Fetch more to filter
                 'type': 'video',
                 'videoCategoryId': '27',  # Education category
+                'videoDuration': 'medium',  # Exclude shorts (4-20 mins)
                 'videoEmbeddable': 'true',
                 'safeSearch': 'strict',
                 'relevanceLanguage': self._get_youtube_language_code(language),
@@ -79,8 +80,13 @@ class YouTubeSearcher:
             # Parse results
             videos = []
             for item in response.get('items', []):
+                title = item['snippet']['title']
+                # Extra safety: Exclude shorts if they slip through
+                if '#shorts' in title.lower() or 'short' in title.lower():
+                    continue
+
                 video = {
-                    'title': item['snippet']['title'],
+                    'title': title,
                     'description': item['snippet']['description'][:150] + '...',
                     'video_id': item['id']['videoId'],
                     'url': f"https://www.youtube.com/watch?v={item['id']['videoId']}",
@@ -88,6 +94,9 @@ class YouTubeSearcher:
                     'channel': item['snippet']['channelTitle']
                 }
                 videos.append(video)
+                
+                if len(videos) >= max_results:
+                    break
 
             logger.info(f"Found {len(videos)} videos for query: {query}")
             return videos
@@ -142,9 +151,8 @@ class YouTubeSearcher:
         formatted = f"\n{headers.get(language, headers['hi'])}\n\n"
 
         for i, video in enumerate(videos, 1):
-            formatted += f"{i}. **{video['title']}**\n"
-            formatted += f"   Channel: {video['channel']}\n"
-            formatted += f"   🔗 {video['url']}\n\n"
+            formatted += f"{i}. [{video['title']}]({video['url']})\n"
+            formatted += f"   Channel: {video['channel']}\n\n"
 
         return formatted
 

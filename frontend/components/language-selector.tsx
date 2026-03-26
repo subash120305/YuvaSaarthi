@@ -71,7 +71,7 @@ export function LanguageSelector({ currentLanguage, onLanguageChange }: Language
           <ChevronDown className="h-3 w-3 opacity-50" strokeWidth={2} />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-64 glass">
+      <DropdownMenuContent align="end" className="w-64 bg-popover border border-border shadow-lg md:glass md:bg-transparent md:border-white/10">
         <div className="p-2">
           <div className="relative">
             <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" strokeWidth={2} />

@@ -3,6 +3,7 @@ YuvaSaarthi - Telegram Bot Interface
 """
 
 import asyncio
+import requests
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import (
     Application,
@@ -15,21 +16,21 @@ from telegram.ext import (
 from loguru import logger
 import sys
 
-from backend.chatbot_engine import get_chatbot
 from utils.config import settings, SUPPORTED_LANGUAGES
+from backend.voice_handler import voice_handler
 
 
 class TelegramBot:
-    """Telegram bot interface for YuvaSaarthi"""
+    """Telegram bot interface for YuvaSaarthi (API Client Mode)"""
 
     def __init__(self):
         self.bot_token = settings.telegram_bot_token
-        self.chatbot = get_chatbot()
-
+        self.api_base_url = "http://localhost:8000/api"
+        
         # User preferences (in-memory storage)
         self.user_preferences = {}
 
-        logger.info("Telegram bot initialized")
+        logger.info("Telegram bot initialized in API Client Mode")
 
     async def start_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         """Handle /start command"""
@@ -40,7 +41,10 @@ class TelegramBot:
         if user_id not in self.user_preferences:
             self.user_preferences[user_id] = {
                 "language": settings.default_language,
-                "include_videos": True
+                "include_videos": True,
+                "socratic_mode": False,
+                "teach_back": False,
+                "native_mnemonics": False
             }
 
         welcome_messages = {
@@ -87,9 +91,7 @@ Ask me anything! 📚
             "raj": f"""
 🎓 **युवासारथी में थारो स्वागत है!**
 
-नमस्कार {user.first_name}! म्हैं थारो AI शिक्षा सहायक हूं।
-
-**म्हैं थारी मदद कर सकूं:**
+नमस्कार {user.first_name}! म्हैं थारी मदद कर सकूं:
 • दाखिलो अर पाठ्यक्रम री जाणकारी
 • परीक्षा री तारीख अर नतीजा
 • अवधारणा री समझावण (कक्षा 8-12)
@@ -102,7 +104,7 @@ Ask me anything! 📚
 /videos - वीडियो टॉगल करो
 /clear - बातचीत साफ करो
 
-म्हानै कांई भी पूछो! 📚
+महानै कांई भी पूछो! 📚
 """
         }
 
@@ -116,199 +118,192 @@ Ask me anything! 📚
         """Handle /help command"""
         user_id = str(update.effective_user.id)
         lang = self.user_preferences.get(user_id, {}).get("language", "hi")
-
+        
         help_texts = {
             "en": """
 **YuvaSaarthi Commands:**
 
 /start - Start the bot
 /help - Show this help message
-/language - Change language (English/Hindi/Rajasthani)
-/videos - Toggle YouTube video recommendations
-/clear - Clear conversation history
+/language - Change language
+/videos - Toggle video recommendations
+/clear - Clear history
 /health - Check system status
-
-**How to use:**
-Just send me your questions directly! For example:
-• "What are the admission requirements?"
-• "Explain Pythagoras theorem"
-• "When are the exams?"
 """,
             "hi": """
 **युवासारथी कमांड:**
 
 /start - बॉट शुरू करें
-/help - यह सहायता संदेश दिखाएं
-/language - भाषा बदलें (अंग्रेज़ी/हिंदी/राजस्थानी)
-/videos - YouTube वीडियो सिफारिशें टॉगल करें
-/clear - वार्तालाप इतिहास साफ़ करें
-/health - सिस्टम स्थिति जांचें
-
-**उपयोग कैसे करें:**
-बस मुझे सीधे अपने सवाल भेजें! उदाहरण के लिए:
-• "प्रवेश की आवश्यकताएं क्या हैं?"
-• "पाइथागोरस प्रमेय समझाओ"
-• "परीक्षाएं कब हैं?"
+/help - सहायता संदेश
+/language - भाषा बदलें
+/videos - वीडियो टॉगल
+/clear - इतिहास साफ़ करें
+/health - सिस्टम स्थिति
 """,
-            "raj": """
-**युवासारथी कमांड:**
+             "raj": """
+**युvaसारथी कमांड:**
 
 /start - बॉट सुरु करो
-/help - यो मदद संदेश देखो
-/language - भाषा बदलो (अंग्रेजी/हिंदी/राजस्थानी)
-/videos - YouTube वीडियो टॉगल करो
-/clear - बातचीत साफ करो
-/health - सिस्टम री हालत देखो
-
-**कैस्यां इस्तेमाल करो:**
-सीधो म्हानै आपरा सवाल भेजो! जैस्या:
-• "दाखिलो री जरूरत कांई है?"
-• "पाइथागोरस थ्योरम समझावो"
-• "परीक्षा कद है?"
+/help - मदद
+/language - भाषा बदलो
+/videos - वीडियो टॉगल
+/clear - बातचीत साफ
+/health - सिस्टम हालत
 """
         }
-
-        await update.message.reply_text(
-            help_texts.get(lang, help_texts["hi"]),
-            parse_mode="Markdown"
-        )
+        await update.message.reply_text(help_texts.get(lang, help_texts["hi"]), parse_mode="Markdown")
 
     async def language_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
-        """Handle /language command - show language selection"""
-        keyboard = [
-            [
-                InlineKeyboardButton("🇬🇧 English", callback_data="lang_en"),
-                InlineKeyboardButton("🇮🇳 हिंदी", callback_data="lang_hi")
-            ],
-            [
-                InlineKeyboardButton("🏜️ राजस्थानी", callback_data="lang_raj")
-            ]
-        ]
-        reply_markup = InlineKeyboardMarkup(keyboard)
+        """Handle /language command"""
+        
+        # Create keyboard from SUPPORTED_LANGUAGES dynamically
+        # Layout: 2 buttons per row
+        keyboard = []
+        row = []
+        
+        for code, info in SUPPORTED_LANGUAGES.items():
+            # User requested clean names without emojis
+            # info is a dictionary: {"name": "English", ...}
+            # We use the English name for clarity, or could use native
+            label = info.get("name", code)
+            
+            row.append(InlineKeyboardButton(label, callback_data=f"lang_{code}"))
+            
+            if len(row) == 2:
+                keyboard.append(row)
+                row = []
+        
+        if row: # Add remaining
+            keyboard.append(row)
 
-        await update.message.reply_text(
-            "Choose your language / अपनी भाषा चुनें / आपरी भाषा चुणो:",
-            reply_markup=reply_markup
-        )
+        reply_markup = InlineKeyboardMarkup(keyboard)
+        await update.message.reply_text("Choose your language / अपनी भाषा चुनें:", reply_markup=reply_markup)
 
     async def language_callback(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
-        """Handle language selection callback"""
+        """Handle language selection"""
         query = update.callback_query
         await query.answer()
-
         user_id = str(query.from_user.id)
         lang_code = query.data.split("_")[1]
-
-        # Update user preference
+        
         if user_id not in self.user_preferences:
             self.user_preferences[user_id] = {}
         self.user_preferences[user_id]["language"] = lang_code
+        
+        # Get language name for confirmation message
+        lang_name = SUPPORTED_LANGUAGES.get(lang_code, {}).get("name", lang_code)
+        
+        # Confirmation message
+        if lang_code == "en":
+            msg = f"✅ Language set to {lang_name}"
+        elif lang_code == "hi":
+            msg = f"✅ भाषा {lang_name} में सेट की गई"
+        elif lang_code == "raj":
+            msg = f"✅ भाषा {lang_name} में सेट"
+        else:
+            # Generic fallback for other languages (English text + Native Name)
+            msg = f"✅ Language set to {lang_name}"
 
-        confirmations = {
-            "en": "✅ Language set to English",
-            "hi": "✅ भाषा हिंदी में सेट की गई",
-            "raj": "✅ भाषा राजस्थानी में सेट होगी"
-        }
-
-        await query.edit_message_text(confirmations.get(lang_code, confirmations["hi"]))
+        await query.edit_message_text(msg)
 
     async def videos_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
-        """Toggle YouTube video recommendations"""
+        """Toggle videos"""
         user_id = str(update.effective_user.id)
 
         if user_id not in self.user_preferences:
             self.user_preferences[user_id] = {"include_videos": True}
 
-        current = self.user_preferences[user_id].get("include_videos", True)
-        self.user_preferences[user_id]["include_videos"] = not current
-
-        lang = self.user_preferences[user_id].get("language", "hi")
-        status = "enabled" if not current else "disabled"
-
-        messages = {
-            "en": f"✅ YouTube video recommendations {status}",
-            "hi": f"✅ YouTube वीडियो सिफारिशें {'सक्षम' if not current else 'अक्षम'}",
-            "raj": f"✅ YouTube वीडियो {'चालू' if not current else 'बंद'}"
-        }
-
-        await update.message.reply_text(messages.get(lang, messages["hi"]))
+        curr = self.user_preferences[user_id].get("include_videos", True)
+        self.user_preferences[user_id]["include_videos"] = not curr
+        status = "enabled" if not curr else "disabled"
+        await update.message.reply_text(f"✅ Video recommendations {status}")
 
     async def clear_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
-        """Clear conversation history"""
+        """Clear history"""
         user_id = str(update.effective_user.id)
-        self.chatbot.clear_history(user_id)
-
-        lang = self.user_preferences.get(user_id, {}).get("language", "hi")
-
-        messages = {
-            "en": "✅ Conversation history cleared!",
-            "hi": "✅ वार्तालाप इतिहास साफ़ हो गया!",
-            "raj": "✅ बातचीत री हिस्ट्री साफ होगी!"
-        }
-
-        await update.message.reply_text(messages.get(lang, messages["hi"]))
+        try:
+            response = requests.post(f"{self.api_base_url}/clear-history?conversation_id={user_id}")
+            response.raise_for_status()
+            await update.message.reply_text("✅ Conversation history cleared!")
+        except Exception as e:
+            await update.message.reply_text(f"❌ Error clearing history: {e}")
 
     async def health_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
-        """Show system health status"""
-        health = self.chatbot.get_system_health()
+        """Check health"""
+        try:
+            resp = requests.get(f"{self.api_base_url}/health")
+            resp.raise_for_status() # Raise HTTPError for bad responses (4xx or 5xx)
+            data = resp.json()
+            await update.message.reply_text(f"✅ System Healthy\nAPI Status: {data.get('status')}")
+        except requests.exceptions.RequestException as e:
+            await update.message.reply_text(f"❌ System Unhealthy\nError connecting to API: {e}")
+        except Exception as e:
+            await update.message.reply_text(f"❌ System Unhealthy\nError: {e}")
 
-        status_text = f"""
-**System Health Status**
+    async def socratic_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+        user_id = str(update.effective_user.id)
+        if user_id not in self.user_preferences:
+            self.user_preferences[user_id] = {"socratic_mode": False}
+        curr = self.user_preferences[user_id].get("socratic_mode", False)
+        self.user_preferences[user_id]["socratic_mode"] = not curr
+        status = "enabled" if not curr else "disabled"
+        await update.message.reply_text(f"✅ Socratic Mode {status}")
 
-🤖 LLM: {health['llm']['status']}
-📺 YouTube: {health['youtube']['status']}
-🌐 Translation: {health['translation']['status']}
-📚 Vector Store: {health['vector_store']['status']}
+    async def teachback_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+        user_id = str(update.effective_user.id)
+        if user_id not in self.user_preferences:
+            self.user_preferences[user_id] = {"teach_back": False}
+        curr = self.user_preferences[user_id].get("teach_back", False)
+        self.user_preferences[user_id]["teach_back"] = not curr
+        status = "enabled" if not curr else "disabled"
+        await update.message.reply_text(f"✅ Teach-Back {status}")
 
-Version: {health['version']}
-"""
-
-        await update.message.reply_text(status_text, parse_mode="Markdown")
+    async def mnemonics_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+        user_id = str(update.effective_user.id)
+        if user_id not in self.user_preferences:
+            self.user_preferences[user_id] = {"native_mnemonics": False}
+        curr = self.user_preferences[user_id].get("native_mnemonics", False)
+        self.user_preferences[user_id]["native_mnemonics"] = not curr
+        status = "enabled" if not curr else "disabled"
+        await update.message.reply_text(f"✅ Native Mnemonics {status}")
 
     async def handle_message(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
-        """Handle user messages"""
+        """Handle user messages via API"""
         user_id = str(update.effective_user.id)
         query = update.message.text
-
-        # Get user preferences
-        prefs = self.user_preferences.get(user_id, {
-            "language": "auto",
-            "include_videos": True
-        })
-
-        # Show typing indicator
+        
+        prefs = self.user_preferences.get(user_id, {"language": "auto", "include_videos": True})
+        
         await update.message.chat.send_action("typing")
-
+        
         try:
-            # Process query
-            result = self.chatbot.process_query(
-                query=query,
-                user_id=user_id,
-                language=prefs.get("language", "auto"),
-                include_videos=prefs.get("include_videos", True)
-            )
-
-            # Send response
-            response_text = result["response"]
-
-            # Add videos if available
-            if result["videos"]:
-                video_text = self.chatbot.youtube.format_videos_for_display(
-                    result["videos"],
-                    result["language"]
-                )
-                response_text += f"\n\n{video_text}"
-
-            await update.message.reply_text(response_text, parse_mode="Markdown")
-
+            payload = {
+                "message": query,
+                "language": prefs.get("language", "auto"),
+                "conversation_id": user_id,
+                "include_videos": prefs.get("include_videos", True),
+                "socratic_mode": prefs.get("socratic_mode", False),
+                "teach_back": prefs.get("teach_back", False),
+                "native_mnemonics": prefs.get("native_mnemonics", False)
+            }
+            
+            response = requests.post(f"{self.api_base_url}/chat", json=payload)
+            response.raise_for_status()
+            data = response.json()
+            
+            # Response text already includes appended video links if any
+            try:
+                await update.message.reply_text(data["response"], parse_mode="Markdown")
+            except Exception as e:
+                logger.warning(f"Markdown parsing failed, falling back to plain text: {e}")
+                await update.message.reply_text(data["response"])
+        
         except Exception as e:
-            logger.error(f"Error handling message: {e}")
-            await update.message.reply_text(
-                "Sorry, I encountered an error. Please try again."
-            )
+            logger.error(f"Error communicating with backend: {e}")
+            await update.message.reply_text("❌ Sorry, I couldn't reach the backend server. Please try again later.")
 
     def run(self):
-        """Run the Telegram bot"""
+        """Run the bot"""
         if not self.bot_token or self.bot_token == "your_telegram_bot_token":
             logger.error("Telegram bot token not configured!")
             print("\n❌ Error: Telegram bot token not configured")
@@ -328,19 +323,81 @@ Version: {health['version']}
         application.add_handler(CommandHandler("videos", self.videos_command))
         application.add_handler(CommandHandler("clear", self.clear_command))
         application.add_handler(CommandHandler("health", self.health_command))
+        application.add_handler(CommandHandler("socratic", self.socratic_command))
+        application.add_handler(CommandHandler("teachback", self.teachback_command))
+        application.add_handler(CommandHandler("mnemonics", self.mnemonics_command))
         application.add_handler(CallbackQueryHandler(self.language_callback, pattern="^lang_"))
         application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, self.handle_message))
+        application.add_handler(MessageHandler(filters.VOICE, self.handle_voice_message))
+        
+        # Handle unsupported content types 
+        unsupported_filters = ~filters.TEXT & ~filters.COMMAND & ~filters.VOICE
+        application.add_handler(MessageHandler(unsupported_filters, self.handle_unsupported_content))
 
         # Start bot
         print("\n" + "=" * 60)
-        print("🎓 YuvaSaarthi Telegram Bot Started!")
+        print("🎓 YuvaSaarthi Telegram Bot Started (API Client Mode)")
         print("=" * 60)
-        print(f"Bot Name: {settings.bot_name}")
-        print(f"Department: {settings.department_name}")
         print("\nBot is running... Press Ctrl+C to stop")
         print("=" * 60 + "\n")
 
         application.run_polling(allowed_updates=Update.ALL_TYPES)
+
+    async def handle_voice_message(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+        """Handle voice messages via Groq STT and return via gTTS"""
+        user_id = str(update.effective_user.id)
+        prefs = self.user_preferences.get(user_id, {"language": "auto", "include_videos": True})
+        
+        await update.message.chat.send_action("record_voice")
+        
+        try:
+            # Download audio
+            voice_file = await context.bot.get_file(update.message.voice.file_id)
+            audio_bytes = await voice_file.download_as_bytearray()
+            
+            # Convert to text
+            query = voice_handler.speech_to_text(bytes(audio_bytes))
+            if not query:
+                await update.message.reply_text("❌ Sorry, I couldn't understand the audio. Please try again.")
+                return
+            
+            # Send to backend
+            payload = {
+                "message": query,
+                "language": prefs.get("language", "auto"),
+                "conversation_id": user_id,
+                "include_videos": prefs.get("include_videos", True),
+                "socratic_mode": prefs.get("socratic_mode", False),
+                "teach_back": prefs.get("teach_back", False),
+                "native_mnemonics": prefs.get("native_mnemonics", False)
+            }
+            
+            response = requests.post(f"{self.api_base_url}/chat", json=payload)
+            response.raise_for_status()
+            data = response.json()
+            reply_text = data["response"]
+            
+            # Fallback for overly long logs
+            clean_reply = reply_text[:1020] + "..." if len(reply_text) > 1024 else reply_text
+            
+            # TTS
+            audio_response = voice_handler.text_to_speech(reply_text, data.get("language", "hi"))
+            
+            if audio_response:
+                await update.message.reply_voice(voice=audio_response, caption=f"🗣️ You said: {query}\n\n{clean_reply}")
+            else:
+                await update.message.reply_text(reply_text, parse_mode="Markdown")
+                
+        except Exception as e:
+            logger.error(f"Error handling voice message: {e}")
+            await update.message.reply_text("❌ Sorry, an error occurred while processing your voice.")
+
+    async def handle_unsupported_content(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+        """Inform user that non-text content is not supported yet"""
+        msg = "⚠️ Sorry, I currently only support text and voice messages.\nPhotos and documents are coming in a future update! 📝"
+        await update.message.reply_text(msg)
+
+
 
 
 if __name__ == "__main__":
@@ -349,7 +406,7 @@ if __name__ == "__main__":
         bot.run()
     except KeyboardInterrupt:
         logger.info("Bot stopped by user")
-        print("\n\n👋 Bot stopped. Goodbye!")
+        print("\n\n👋 Bot stopped.")
     except Exception as e:
         logger.error(f"Bot crashed: {e}")
         print(f"\n\n❌ Error: {e}")

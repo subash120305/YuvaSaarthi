@@ -1,7 +1,13 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Navbar } from "./navbar"
+import dynamic from "next/dynamic"
+
+// Dynamically import Navbar to avoid hydration mismatch with Radix UI IDs
+const Navbar = dynamic(() => import("./navbar").then((mod) => mod.Navbar), {
+  ssr: false,
+  loading: () => <div className="h-16 border-b border-border/50 glass" />, // Skeleton placeholder
+})
 import { ChatArea } from "./chat-area"
 import { ChatInput } from "./chat-input"
 import type { Message } from "@/lib/types"
@@ -98,7 +104,7 @@ export function ChatInterface() {
   }
 
   return (
-    <div className="flex h-screen overflow-hidden bg-gradient-to-br from-muted/50 via-background to-muted/30 pt-16">
+    <div className="flex h-[100dvh] overflow-hidden bg-gradient-to-br from-muted/50 via-background to-muted/30 pt-16">
       {/* Main Content - No Sidebar */}
       <div className="flex flex-1 flex-col">
         <Navbar
@@ -113,7 +119,11 @@ export function ChatInterface() {
           onSelectPrompt={handleSelectPrompt}
         />
 
-        <ChatInput onSend={handleSendMessage} disabled={isTyping} />
+        <ChatInput
+          onSend={handleSendMessage}
+          disabled={isTyping}
+          history={messages.filter(m => m.role === "user").map(m => m.content)}
+        />
       </div>
     </div>
   )

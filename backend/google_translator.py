@@ -14,25 +14,10 @@ sys.path.append(str(Path(__file__).parent.parent))
 from utils.config import settings
 
 
-# All official Indian languages (22 + English)
-INDIAN_LANGUAGES = {
-    "en": "English",
-    "hi": "Hindi",
-    "bn": "Bengali",
-    "te": "Telugu", 
-    "mr": "Marathi",
-    "ta": "Tamil",
-    "gu": "Gujarati",
-    "kn": "Kannada",
-    "ml": "Malayalam",
-    "or": "Odia",
-    "pa": "Punjabi",
-    "as": "Assamese",
-    "ur": "Urdu",
-    "ne": "Nepali",
-    "sa": "Sanskrit",
-    "sd": "Sindhi",
-}
+from utils.indian_languages import SUPPORTED_INDIAN_LANGUAGES
+
+# Sync with official full list
+INDIAN_LANGUAGES = {code: info["name"] for code, info in SUPPORTED_INDIAN_LANGUAGES.items()}
 
 
 class GoogleTranslatorService:
