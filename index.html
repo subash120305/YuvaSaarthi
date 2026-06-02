@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>YuvaSaarthi — AI Education for Every Indian</title>
+  <meta name="description" content="YuvaSaarthi is an Indian multilingual AI education chatbot supporting 23 languages. JEE, NEET, UPSC, and Board exam preparation with RAG, voice, and Socratic learning." />
+  <meta property="og:title" content="YuvaSaarthi — Education for Every Indian" />
+  <meta property="og:description" content="Multilingual AI tutor in 23 Indian languages. JEE · NEET · UPSC · Boards." />
+  <meta property="og:image" content="yuvasaarthi_welcome_final.png" />
+  <link rel="icon" href="telegram_bot_logo_final.jpg" type="image/jpeg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Space+Grotesk:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ───────────────────────── NAV ───────────────────────── -->
+  <nav class="nav" id="nav">
+    <div class="nav__inner container">
+      <a class="nav__brand" href="#">
+        <img src="telegram_bot_logo_final.jpg" alt="YuvaSaarthi logo" class="nav__icon" width="36" height="36" />
+        <span class="nav__name">YuvaSaarthi</span>
+      </a>
+      <button class="nav__toggle" id="navToggle" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav__links" id="navLinks">
+        <li><a href="#mission">Mission</a></li>
+        <li><a href="#features">Features</a></li>
+        <li><a href="#tech">Tech Stack</a></li>
+        <li><a href="#access">Access</a></li>
+      </ul>
+      <a class="btn btn--saffron nav__cta" href="https://t.me/YuvaSaarthiBot" target="_blank" rel="noopener">
+        Open Telegram Bot
+      </a>
+    </div>
+  </nav>
+
+  <!-- ───────────────────────── HERO ───────────────────────── -->
+  <section class="hero" id="hero">
+    <div class="hero__bg-text" aria-hidden="true">शिक्षा</div>
+    <div class="container hero__inner">
+      <div class="hero__left">
+        <div class="hero__badge">
+          <span class="badge__dot"></span>
+          AI-Powered · Multilingual · Free
+        </div>
+        <h1 class="hero__headline">
+          Education for Every Indian,<br />
+          <span class="highlight">in Every Indian Language</span>
+        </h1>
+        <p class="hero__sub">
+          YuvaSaarthi is your personal AI counselor — preparing you for
+          <strong>JEE, NEET, UPSC, and Board exams</strong> in <strong>23 Indian languages</strong>.
+          Powered by Groq LPU inference and offline-capable RAG, it speaks your language, literally.
+        </p>
+        <div class="hero__stats">
+          <div class="stat">
+            <span class="stat__number">23</span>
+            <span class="stat__label">Languages</span>
+          </div>
+          <div class="stat__divider"></div>
+          <div class="stat">
+            <span class="stat__number">22</span>
+            <span class="stat__label">Features</span>
+          </div>
+          <div class="stat__divider"></div>
+          <div class="stat">
+            <span class="stat__number">Groq</span>
+            <span class="stat__label">LPU Inference</span>
+          </div>
+          <div class="stat__divider"></div>
+          <div class="stat">
+            <span class="stat__number">RAG</span>
+            <span class="stat__label">Offline-Ready</span>
+          </div>
+        </div>
+        <div class="hero__ctas">
+          <a class="btn btn--saffron btn--lg" href="https://t.me/YuvaSaarthiBot" target="_blank" rel="noopener">
+            Try on Telegram ↗
+          </a>
+          <a class="btn btn--ghost btn--lg" href="https://github.com/subash120305/yuvasaarthi" target="_blank" rel="noopener">
+            View on GitHub
+          </a>
+        </div>
+        <p class="hero__langs">
+          हिंदी · ಕನ್ನಡ · தமிழ் · मराठी · বাংলা · తెలుగు · ਪੰਜਾਬੀ · ગુજરાતી · and 15 more
+        </p>
+      </div>
+      <div class="hero__right">
+        <div class="hero__card">
+          <div class="hero__card-glow"></div>
+          <img
+            src="telegram_bot_logo_final.jpg"
+            alt="YuvaSaarthi — AI Education Bot"
+            class="hero__welcome-img"
+          />
+        </div>
+      </div>
+    </div>
+    <div class="hero__scroll-hint" aria-hidden="true">
+      <span>Scroll</span>
+      <div class="scroll-arrow"></div>
+    </div>
+  </section>
+
+  <!-- ───────────────────────── PROBLEM ───────────────────────── -->
+  <section class="problem" id="mission">
+    <div class="container">
+      <div class="section-label">The Problem We Solve</div>
+      <h2 class="section-title">
+        1 counselor per <span class="highlight">1,00,000 students</span>
+      </h2>
+      <p class="section-sub">
+        India's education crisis isn't just about content — it's about access, language, and
+        personalised guidance that reaches every child, from Kochi to Kohima.
+      </p>
+      <div class="problem__grid">
+        <div class="problem__card">
+          <div class="problem__icon">🗣️</div>
+          <h3>Language Barrier</h3>
+          <p>
+            Over 70% of India's students learn in their mother tongue, yet most AI tools
+            only support English. Knowledge locked behind a language is knowledge denied.
+          </p>
+        </div>
+        <div class="problem__card">
+          <div class="problem__icon">📡</div>
+          <h3>Information Overload</h3>
+          <p>
+            Thousands of YouTube channels, PDFs, and coaching apps — but no single trusted
+            voice that curates, contextualises, and delivers what a student actually needs today.
+          </p>
+        </div>
+        <div class="problem__card">
+          <div class="problem__icon">🧭</div>
+          <h3>No Personal Guidance</h3>
+          <p>
+            Toppers have mentors. Everyone else improvises. YuvaSaarthi gives every student
+            a Socratic guide that remembers where they struggle and pushes them to think deeper.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────────────────────── FEATURES ───────────────────────── -->
+  <section class="features" id="features">
+    <div class="container">
+      <div class="section-label">What It Can Do</div>
+      <h2 class="section-title">
+        22 features. One mission: <span class="highlight">your success</span>
+      </h2>
+      <p class="section-sub">
+        From offline RAG to real-time voice, from spaced repetition to distress interception —
+        YuvaSaarthi is engineered to be a full-stack learning companion.
+      </p>
+      <div class="features__grid">
+
+        <div class="feature-card">
+          <div class="feature-card__icon">📚</div>
+          <h3 class="feature-card__title">Retrieval-Augmented Generation</h3>
+          <p class="feature-card__desc">
+            ChromaDB-backed RAG retrieves verified NCERT, coaching, and past-paper content
+            so every answer is grounded, not hallucinated.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-card__icon">🌐</div>
+          <h3 class="feature-card__title">23 Indian Languages</h3>
+          <p class="feature-card__desc">
+            Full support for Hindi, Kannada, Tamil, Marathi, Bengali, Telugu, Punjabi,
+            Gujarati, and 15 more — ask in any script, get answers in the same.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-card__icon">🎙️</div>
+          <h3 class="feature-card__title">Voice Input & Output</h3>
+          <p class="feature-card__desc">
+            Students who struggle to type — or are on the go — can speak their doubt and
+            hear the explanation back, in their own language.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-card__icon">📷</div>
+          <h3 class="feature-card__title">OCR for Handwritten Questions</h3>
+          <p class="feature-card__desc">
+            Snap a photo of a handwritten problem from your notebook. YuvaSaarthi reads,
+            parses, and solves it — no typing required.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-card__icon">🤔</div>
+          <h3 class="feature-card__title">Socratic Questioning Mode</h3>
+          <p class="feature-card__desc">
+            Instead of just giving answers, the bot guides students to discover solutions
+            themselves — building deeper, longer-lasting understanding.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-card__icon">🔁</div>
+          <h3 class="feature-card__title">Spaced Repetition (SM-2)</h3>
+          <p class="feature-card__desc">
+            The proven SM-2 algorithm schedules review sessions at the exact moment
+            before you forget — maximising retention, minimising study time.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-card__icon">💙</div>
+          <h3 class="feature-card__title">Distress Interception</h3>
+          <p class="feature-card__desc">
+            When a student expresses burnout, anxiety, or hopelessness, YuvaSaarthi
+            detects it and responds with empathy, resources, and human escalation paths.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-card__icon">▶️</div>
+          <h3 class="feature-card__title">YouTube Video Integration</h3>
+          <p class="feature-card__desc">
+            Curated video recommendations from trusted Indian educators, surfaced exactly
+            when the concept being discussed benefits from visual explanation.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-card__icon">🎓</div>
+          <h3 class="feature-card__title">Scholarship Finder</h3>
+          <p class="feature-card__desc">
+            Integrated with MyScheme.gov.in — matches each student's profile to central
+            and state government scholarships they are actually eligible for.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-card__icon">✈️</div>
+          <h3 class="feature-card__title">Telegram Bot Interface</h3>
+          <p class="feature-card__desc">
+            Works on the phone every Indian student already has. No app install, no signup
+            friction — just open Telegram and start learning.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-card__icon">📋</div>
+          <h3 class="feature-card__title">Teacher Lesson Planner</h3>
+          <p class="feature-card__desc">
+            Teachers can generate structured lesson plans, quiz banks, and revision sheets
+            tailored to the NCERT curriculum — in minutes.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-card__icon">👁️</div>
+          <h3 class="feature-card__title">Multimodal Understanding</h3>
+          <p class="feature-card__desc">
+            Text, image, voice — YuvaSaarthi processes all modalities so students can
+            interact naturally, however they learn best.
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────────────────────── TECH STACK ───────────────────────── -->
+  <section class="tech" id="tech">
+    <div class="container">
+      <div class="section-label">Under the Hood</div>
+      <h2 class="section-title">
+        Built with <span class="highlight">serious engineering</span>
+      </h2>
+      <p class="section-sub">
+        Every technology was chosen because Indian students deserve a system that is fast,
+        reliable, and truly multilingual — not an English product with a translation layer bolted on.
+      </p>
+      <div class="tech__columns">
+
+        <div class="tech__column">
+          <div class="tech__col-header">
+            <span class="tech__col-icon">🖥️</span>
+            Frontend
+          </div>
+          <ul class="tech__list">
+            <li class="tech__item">
+              <span class="tech__item-name">Next.js 14</span>
+              <span class="tech__item-desc">App Router, SSR, dynamic routes</span>
+            </li>
+            <li class="tech__item">
+              <span class="tech__item-name">Tailwind CSS</span>
+              <span class="tech__item-desc">Utility-first responsive styling</span>
+            </li>
+            <li class="tech__item">
+              <span class="tech__item-name">React 18</span>
+              <span class="tech__item-desc">Component architecture, hooks</span>
+            </li>
+            <li class="tech__item">
+              <span class="tech__item-name">Vercel</span>
+              <span class="tech__item-desc">Edge deployment, CI/CD</span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="tech__divider"></div>
+
+        <div class="tech__column">
+          <div class="tech__col-header">
+            <span class="tech__col-icon">⚙️</span>
+            Backend & AI
+          </div>
+          <ul class="tech__list">
+            <li class="tech__item">
+              <span class="tech__item-name">FastAPI</span>
+              <span class="tech__item-desc">High-performance async Python API</span>
+            </li>
+            <li class="tech__item">
+              <span class="tech__item-name">LangChain</span>
+              <span class="tech__item-desc">Chains, memory, tool-use orchestration</span>
+            </li>
+            <li class="tech__item">
+              <span class="tech__item-name">ChromaDB</span>
+              <span class="tech__item-desc">Offline-capable vector store for RAG</span>
+            </li>
+            <li class="tech__item">
+              <span class="tech__item-name">Groq · Llama-3.3-70b</span>
+              <span class="tech__item-desc">Ultra-fast LPU inference, sub-second latency</span>
+            </li>
+            <li class="tech__item">
+              <span class="tech__item-name">Sentence Transformers</span>
+              <span class="tech__item-desc">Multilingual semantic embeddings</span>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────────────────────── ACCESS ───────────────────────── -->
+  <section class="access" id="access">
+    <div class="container">
+      <div class="section-label">Get Started</div>
+      <h2 class="section-title">
+        Two ways to <span class="highlight">start learning</span>
+      </h2>
+      <p class="section-sub">
+        Pick the interface that works for you — no barriers, no paywalls, no excuses.
+      </p>
+      <div class="access__grid">
+
+        <div class="access__card access__card--telegram">
+          <div class="access__card-badge">Recommended</div>
+          <div class="access__img-wrap">
+            <img src="telegram_bot_logo_final.jpg" alt="YuvaSaarthi Telegram Bot" class="access__bot-img" />
+          </div>
+          <div class="access__card-body">
+            <h3>Telegram Bot</h3>
+            <p>
+              The fastest way to start. Open Telegram, find <strong>@YuvaSaarthiBot</strong>,
+              and ask your first question — in any Indian language. Zero setup, works on any Android
+              or iPhone, even on 2G.
+            </p>
+            <ul class="access__perks">
+              <li>✓ No account needed</li>
+              <li>✓ Works offline on slow networks</li>
+              <li>✓ Voice messages supported</li>
+              <li>✓ Send photos of your notes</li>
+            </ul>
+            <a class="btn btn--saffron btn--lg access__btn" href="https://t.me/YuvaSaarthiBot" target="_blank" rel="noopener">
+              Chat on Telegram ↗
+            </a>
+          </div>
+        </div>
+
+        <div class="access__card access__card--web">
+          <div class="access__card-body">
+            <div class="access__web-icon">🌐</div>
+            <h3>Next.js Web App</h3>
+            <p>
+              A full-featured web interface built on Next.js 14 with Tailwind CSS. Richer UI, file
+              uploads, session history, and teacher tools. Self-hostable or deploy on Vercel with one click.
+            </p>
+            <ul class="access__perks">
+              <li>✓ Teacher lesson planner</li>
+              <li>✓ Detailed session analytics</li>
+              <li>✓ Full multimodal support</li>
+              <li>✓ Open-source & self-hostable</li>
+            </ul>
+            <div class="access__web-btns">
+              <a class="btn btn--saffron btn--lg" href="https://github.com/subash120305/yuvasaarthi" target="_blank" rel="noopener">
+                View on GitHub ↗
+              </a>
+              <a class="btn btn--ghost btn--lg" href="https://github.com/subash120305/yuvasaarthi#readme" target="_blank" rel="noopener">
+                Read Docs
+              </a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────────────────────── DEVELOPER ───────────────────────── -->
+  <section class="developer" id="developer">
+    <div class="container">
+      <div class="developer__inner">
+        <div class="developer__text">
+          <div class="section-label">The Builder</div>
+          <h2 class="section-title--sm">
+            Developed by <span class="highlight">Subash S</span>
+          </h2>
+          <p class="developer__bio">
+            A developer who believes technology's greatest obligation in India is to ensure
+            that the next Aryabhatta does not fail because she couldn't afford coaching —
+            or because the textbook was in the wrong language.
+          </p>
+          <div class="developer__links">
+            <a class="dev-link" href="https://github.com/subash120305" target="_blank" rel="noopener">
+              <span class="dev-link__icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/>
+                </svg>
+              </span>
+              GitHub Profile
+            </a>
+            <a class="dev-link" href="https://github.com/subash120305/yuvasaarthi" target="_blank" rel="noopener">
+              <span class="dev-link__icon">📦</span>
+              YuvaSaarthi Repo
+            </a>
+            <a class="dev-link" href="https://www.linkedin.com/in/subash120305" target="_blank" rel="noopener">
+              <span class="dev-link__icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                </svg>
+              </span>
+              LinkedIn
+            </a>
+          </div>
+        </div>
+        <div class="developer__mission">
+          <blockquote class="mission-quote">
+            <p>
+              "सा विद्या या विमुक्तये" —<br />
+              <em>That is true knowledge which liberates.</em>
+            </p>
+            <cite>— Ancient Indian wisdom, the north star for YuvaSaarthi</cite>
+          </blockquote>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────────────────────── FOOTER ───────────────────────── -->
+  <footer class="footer">
+    <div class="footer__flag-strip" aria-hidden="true">
+      <div class="flag-stripe flag-stripe--saffron"></div>
+      <div class="flag-stripe flag-stripe--white">
+        <div class="ashoka-chakra" aria-hidden="true">&#9784;</div>
+      </div>
+      <div class="flag-stripe flag-stripe--green"></div>
+    </div>
+    <div class="footer__body">
+      <div class="container footer__inner">
+        <div class="footer__brand">
+          <img src="frontend/public/icon-dark-32x32.png" alt="YuvaSaarthi" width="28" height="28" />
+          <span class="footer__brand-name">YuvaSaarthi</span>
+        </div>
+        <p class="footer__tagline">
+          Empowering every student. Every language. Every dream.
+        </p>
+        <div class="footer__links">
+          <a href="https://github.com/subash120305/yuvasaarthi" target="_blank" rel="noopener">GitHub</a>
+          <a href="https://t.me/YuvaSaarthiBot" target="_blank" rel="noopener">Telegram</a>
+          <a href="https://www.linkedin.com/in/subash120305" target="_blank" rel="noopener">LinkedIn</a>
+        </div>
+        <p class="footer__copy">
+          &copy; 2026 YuvaSaarthi — Developed by Subash S. Open-source and free for students.
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // ── Nav scroll effect ──
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('nav--scrolled', window.scrollY > 40);
+    });
+
+    // ── Mobile menu toggle ──
+    const toggle = document.getElementById('navToggle');
+    const links  = document.getElementById('navLinks');
+    toggle.addEventListener('click', () => {
+      const open = links.classList.toggle('nav__links--open');
+      toggle.setAttribute('aria-expanded', open);
+    });
+
+    // ── Close menu on link click ──
+    links.querySelectorAll('a').forEach(a => {
+      a.addEventListener('click', () => {
+        links.classList.remove('nav__links--open');
+        toggle.setAttribute('aria-expanded', false);
+      });
+    });
+
+    // ── Intersection observer for fade-in ──
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll(
+      '.problem__card, .feature-card, .tech__item, .access__card, .developer__inner'
+    ).forEach(el => {
+      el.classList.add('fade-in');
+      observer.observe(el);
+    });
+  </script>
+</body>
+</html>
